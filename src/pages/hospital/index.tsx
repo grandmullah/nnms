@@ -35,32 +35,21 @@ import {
   
     {
       // image: 'https://img.icons8.com/clouds/256/000000/futurama-mom.png',
-      label: 'Carol Miller',
+      label: 'Kenyatta Hospital',
       value: '002',
-      description: 'One of the richest people on Earth',
-    },
-    {
-      image: 'https://img.icons8.com/clouds/256/000000/homer-simpson.png',
-      label: 'Homer Simpson',
-      value: 'Homer Simpson',
-      description: 'Overweight, lazy, and often ignorant',
-    },
-    {
-      image: 'https://img.icons8.com/clouds/256/000000/spongebob-squarepants.png',
-      label: 'Spongebob Squarepants',
-      value: 'Spongebob Squarepants',
-      description: 'Not just a sponge',
-    },
+      description: 'level 4 hospital ',
+    }
+    
   ];
   
   interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
-    image: string;
+    // image: string;
     label: string;
     description: string;
   }
   
   const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-    ({ image, label, description, ...others }: ItemProps, ref) => (
+    ({  label, description, ...others }: ItemProps, ref) => (
       <div ref={ref} {...others}>
         <Group noWrap>
           
@@ -94,7 +83,8 @@ import {
         if (user) {
 
           console.log(user)
-        //   const idTokenResult = await user.getIdTokenResult()
+          const idTokenResult = await user.getIdTokenResult()
+          router.push(`/hospital/${idTokenResult.claims.role}`)
         //   console.log(idTokenResult)
         //   if(!idTokenResult.claims.hospital.includes(hospital)){
         //       toast.error('Auth hospital failed ')
@@ -148,7 +138,7 @@ import {
         <Text color="dimmed" size="sm" align="center" mt={5}>
           Do not have an account yet?{' '}
           <Anchor<'a'> href="#" size="sm" onClick={(event) => event.preventDefault()}>
-            Create account
+            Contact support
           </Anchor>
         </Text>
   

@@ -72,3 +72,8 @@ export const  RequestAccess =({hospital,user,phoneNumber}:accessProps)=> {
     </Group>
   );
 }
+
+
+// const OTP  =( )=>{
+//     return
+// }

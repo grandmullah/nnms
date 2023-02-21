@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createStyles, Navbar, Group, Code, Grid } from '@mantine/core';
+import { createStyles, Navbar, Group, Code, Grid, Text } from '@mantine/core';
 import {
   IconBellRinging,
   IconFingerprint,
@@ -15,18 +15,14 @@ import { MantineLogo } from '@mantine/ds';
 import { getAuth, signOut } from "firebase/auth";
 import {app} from '../../../firebase'
 const auth = getAuth(app);
+import { Dashboard } from '@/components/Doctors/Dashboard';
 
 import { useRouter } from 'next/navigation';
 
 
 
 const NotificationComponent = () => <div>Notification Component</div>;
-const BillingComponent = () => <div>Billing Component</div>;
-const SecurityComponent = () => <div>Security Component</div>;
-const SSHKeysComponent = () => <div>SSH Keys Component</div>;
-const DatabasesComponent = () => <div>Databases Component</div>;
-const AuthenticationComponent = () => <div>Authentication Component</div>;
-const OtherSettingsComponent = () => <div>Other Settings Component</div>;
+
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon');
@@ -104,19 +100,22 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const data = [
+ 
+  { link: '', label: 'Dashboard', icon: IconReceipt2 },
   { link: '', label: 'Notifications', icon: IconBellRinging },
-  { link: '', label: 'Billing', icon: IconReceipt2 },
+  { link: '', label: 'Lab Reports ', icon: IconDatabaseImport },
+
   { link: '', label: 'Security', icon: IconFingerprint },
-  { link: '', label: 'SSH Keys', icon: IconKey },
-  { link: '', label: 'Databases', icon: IconDatabaseImport },
-  { link: '', label: 'Authentication', icon: Icon2fa },
+  // { link: '', label: 'SSH Keys', icon: IconKey },
+  // { link: '', label: 'Databases', icon: IconDatabaseImport },
+  // { link: '', label: 'Authentication', icon: Icon2fa },
   { link: '', label: 'Other Settings', icon: IconSettings },
 ];
 
 export default function NavbarSimpleColored() {
   const router = useRouter();
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState('Billing');
+  const [active, setActive] = useState('Dashboard');
 
   const links = data.map((item) => (
     <a
@@ -139,8 +138,9 @@ export default function NavbarSimpleColored() {
         <Navbar  p="md" className={classes.navbar}>
           <Navbar.Section grow>
             <Group className={classes.header} position="apart">
-              <MantineLogo size={28} inverted />
-              <Code className={classes.version}>v3.1.2</Code>
+              
+              <Text style={{color:'white'}}>NNMS</Text>
+              <Code className={classes.version}>v1.0.0</Code>
             </Group>
             {links}
           </Navbar.Section>
@@ -163,11 +163,17 @@ export default function NavbarSimpleColored() {
         </Navbar>
       </Grid.Col>
       <Grid.Col span={9}>
-        <div className={classes.navbar}  >
-
+      
+        <div className={classes.navbar}  style={{height:'50px', marginTop: '20px', marginBottom: '10px',}}>
+          
         </div>
-          {active === 'Billing' &&  < NotificationComponent />}
+        
+        <div style={{ marginTop: '20px', marginBottom: '10px', marginRight: '20px'}}>
+        {active === 'Dashboard' &&  < Dashboard />}
+        </div>
+          
        
+    
       </Grid.Col>
     
 
