@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import AuthReducer from './features/authSlice'
+import BioReducer from './features/triageSlice'
 
 export const store = configureStore({
   reducer: {
-    Auth:AuthReducer
+    Auth:AuthReducer,
+    Bio:BioReducer
   },
 })
 

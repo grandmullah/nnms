@@ -6,6 +6,11 @@ import {app} from '../../firebase'
 const db = getFirestore(app)
 import { doc, updateDoc } from "firebase/firestore";
 import React from 'react';
+
+
+
+
+
 export function Proceed({name,user,hospital}:proceed) {
     const [state, setSate] =  React.useState(false)
     React.useEffect(()=>{

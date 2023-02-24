@@ -84,7 +84,7 @@ import {
 
           console.log(user)
           const idTokenResult = await user.getIdTokenResult()
-          router.push(`/hospital/${idTokenResult.claims.role}`)
+          router.push(`/hospital/clinical`)
         //   console.log(idTokenResult)
         //   if(!idTokenResult.claims.hospital.includes(hospital)){
         //       toast.error('Auth hospital failed ')
@@ -116,7 +116,7 @@ import {
             toast.error('Auth hospital failed ')
         }else{
           dispatch(updateAuth({role:`${idTokenResult.claims.role}`,hospital:hospital}))
-        router.push(`/hospital/${idTokenResult.claims.role}`)
+        router.push(`/hospital/clinical`)
         }
         // Check user's county here
       })
