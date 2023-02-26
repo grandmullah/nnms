@@ -154,7 +154,7 @@ import {
               maxDropdownHeight={400}
               nothingFound="Nobody here"
               filter={(value, item) =>
-                  item.label.toLowerCase().includes(value.toLowerCase().trim()) ||
+                  item?.label?.toLowerCase().includes(value.toLowerCase().trim()) ||
                   item.description.toLowerCase().includes(value.toLowerCase().trim())
               }
               />

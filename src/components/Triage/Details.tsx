@@ -1,6 +1,6 @@
 import { BioData } from '../../app/features/triageSlice';
 import { createStyles, ThemeIcon, Text, SimpleGrid, Box, Stack } from '@mantine/core';
-import { IconSun, IconPhone, IconMapPin, IconAt } from '@tabler/icons';
+import { IconSun, IconPhone, IconMapPin, IconAt, IconId,IconCalendarEvent, IconMan } from '@tabler/icons';
 
 type ContactIconVariant = 'white' | 'gradient';
 
@@ -78,22 +78,25 @@ interface ContactIconsListProps {
   variant?: ContactIconVariant;
 }
 
-const MOCKDATA = [
-  { title: 'Email', description: 'hello@mantine.dev', icon: IconAt },
-  { title: 'Phone', description: '+49 (800) 335 35 35', icon: IconPhone },
-  { title: 'Address', description: '844 Morris Park avenue', icon: IconMapPin },
-  { title: 'Working hours', description: '8 a.m. – 11 p.m.', icon: IconSun },
-];
 
-export function ContactIconsList({ data = MOCKDATA, variant }: ContactIconsListProps) {
-  const items = data.map((item, index) => <ContactIcon key={index} variant={variant} {...item} />);
+
+export function ContactIconsList({ data , variant }: ContactIconsListProps) {
+  const items = data?.map((item, index) => <ContactIcon key={index} variant={variant} {...item} />);
   return <Stack>{items}</Stack>;
 }
 
 export function Details({user,loading,error}:BioData) {
+    const MOCKDATA = [
+        {title: 'Name', description: `${user.bio.name}`, icon: IconId },
+        {title: 'D.O.B', description: `${user.bio.DOB}`, icon: IconCalendarEvent},
+        {title: 'Gender', description: `${user.bio.gender}`, icon: IconMan},
+        { title: 'Email', description: `${user.bio.email}`, icon: IconAt },
+        { title: 'Phone', description: `${user.bio.phoneNumber}`, icon: IconPhone },
+      
+      ];
   return (
     <SimpleGrid cols={2} breakpoints={[{ maxWidth: 755, cols: 1 }]}>
-      <Box
+      {/* <Box
         sx={(theme) => ({
           padding: theme.spacing.xl,
           borderRadius: theme.radius.md,
@@ -101,7 +104,7 @@ export function Details({user,loading,error}:BioData) {
         })}
       >
         <ContactIconsList />
-      </Box>
+      </Box> */}
 
       <Box
         sx={(theme) => ({
@@ -112,7 +115,7 @@ export function Details({user,loading,error}:BioData) {
           } 100%)`,
         })}
       >
-        <ContactIconsList variant="white" />
+        <ContactIconsList data={MOCKDATA} variant="white" />
       </Box>
     </SimpleGrid>
   );

@@ -4,13 +4,21 @@ import { doc, getDoc, getFirestore} from "firebase/firestore";
 import {app} from '../../firebase'
 const db = getFirestore(app);
 
+
+
+
 export interface user {
-    id:string
+    bio:Bio
 }
 
-// export interface Bio {
-
-// }
+export interface Bio {
+    id:string
+    name:string,
+    phoneNumber:string,
+    gender:string,
+    DOB:string,
+    email:string,
+}
 
 export interface BioData {
     user:user,
@@ -20,7 +28,14 @@ export interface BioData {
 
 const initialState:BioData = {
     user:{
-        id:''
+        bio:{
+            id:'',
+            name:'',
+            phoneNumber:'',
+            gender:'',
+            DOB:'',
+            email:'',
+        }
     },
     loading:'idle',
     error:null
@@ -70,18 +85,31 @@ export const BioSlice = createSlice({
 // }
 
 export const getUsers = createAsyncThunk('getUsers', async (id:string) => {
-    const docRef = doc(db, "patients", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        return {
-            id:docSnap.data().id
+    try {
+        const docRef = doc(db, "patients", id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            return {
+                bio:{
+                id: docSnap.data().id,
+                name: docSnap.data().firstName,
+                phoneNumber:docSnap.data().phoneNumber,
+                gender:docSnap.data().gender,
+                DOB:docSnap.data().DOB,
+                email:docSnap.data().email,
+                }
+            }
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+            throw new Error("No such document!")
         }
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
+    } catch (error) {
+        console.log(error)
         throw new Error()
-      }
+    }
+    
    
 })
 
