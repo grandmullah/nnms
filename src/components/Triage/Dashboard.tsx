@@ -83,8 +83,8 @@ export function ActionsGrid() {
 
   return (
     <>
-            <div   style={{height:'50px', marginTop: '20px', marginBottom: '10px',}}>
-          
+            <div   style={{ backgroundColor:'#4DABF7',height:'50px', marginTop: '20px',}}>
+             <Text style={{textAlign:'center', padding:'2px'}}>{ `PATIENT: ${data.user.bio.name}`}</Text>
           </div>
       <Card className={classes.card}>
         <Group position="apart">
@@ -97,12 +97,12 @@ export function ActionsGrid() {
           {items}
         </SimpleGrid>
 
-        <div style={{ marginTop: '40px', marginBottom: '10px', marginRight: '20px',borderTop: '3px solid #7048E8' }}>
+        <div style={{  marginTop: '40px', marginBottom: '10px', marginRight: '20px',borderTop: '3px solid #7048E8' }}>
 
         
         <div style={{ marginTop: '40px', marginBottom: '10px', marginRight: '20px'}} >
           {active === 'Patient Details' &&  < Details  {...data} />}
-          {active === 'Complains' &&  <Complains/> }
+          {active === 'Complains' &&  <Complains {...data}/> }
           {active === 'Vital signs' &&  <Vitals/> }
           {active === 'Medications' &&  <Medication/> }
           {active === 'Medical history' &&  <MedicalHistory/> }

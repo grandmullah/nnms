@@ -13,7 +13,8 @@ const firebaseConfig = {
   storageBucket: "collins2-cd213.appspot.com",
   messagingSenderId: "1075547441747",
   appId: "1:1075547441747:web:4b3ceec6d1810a320714a6",
-  measurementId: "G-SSMNKXGX9P"
+  measurementId: "G-SSMNKXGX9P",
+  databaseURL:"https://collins2-cd213-default-rtdb.firebaseio.com/"
 };
 // Initialize Firebase
 export  const app = initializeApp(firebaseConfig);

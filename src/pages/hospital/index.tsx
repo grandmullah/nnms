@@ -115,7 +115,7 @@ import {
            await  signOut(auth)
             toast.error('Auth hospital failed ')
         }else{
-          dispatch(updateAuth({role:`${idTokenResult.claims.role}`,hospital:hospital}))
+          dispatch(updateAuth({role:`${idTokenResult.claims.role}`,hospital:hospital,name:email}))
         router.push(`/hospital/clinical`)
         }
         // Check user's county here

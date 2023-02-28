@@ -10,7 +10,13 @@ import {
     ActionIcon,
   } from '@mantine/core';
   import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
-  import { ContactIconsList } from './Details';
+ import { updateComplains } from '@/app/features/complains';
+import { useSelector,useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '@/app/store';
+import { useState } from 'react';
+import { BioData } from '@/app/features/triageSlice';
+import { Notes } from './note';
+ 
   
   const useStyles = createStyles((theme) => ({
     wrapper: {
@@ -78,52 +84,50 @@ import {
   
   const social = [IconBrandTwitter, IconBrandYoutube, IconBrandInstagram];
   
-  export function Complains() {
+  export function Complains({user,}:BioData) {
     const { classes } = useStyles();
-  
-    const icons = social.map((Icon, index) => (
-      <ActionIcon key={index} size={28} className={classes.social} variant="transparent">
-        <Icon size={22} stroke={1.5} />
-      </ActionIcon>
-    ));
+    const {loading,error} =  useSelector((state:RootState) => state.Complains)
+    const {name,hospital} =  useSelector((state:RootState) => state.Auth)
+    const dispatch = useDispatch<AppDispatch>()
+    const [value, setValue] = useState('');
+
   
     return (
       <div className={classes.wrapper}>
         <SimpleGrid cols={2} spacing={50} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
           <div>
-            <Title className={classes.title}>Contact us</Title>
-            <Text className={classes.description} mt="sm" mb={30}>
+            <Title className={classes.title}>Previous Complains</Title>
+
+            <Notes {...user.complains}/>
+            {/* <Text className={classes.description} mt="sm" mb={30}>
               Leave your email and we will get back to you within 24 hours
-            </Text>
+            </Text> */}
   
-            <ContactIconsList variant="white" />
+            {/* <ContactIconsList variant="white" /> */}
   
-            <Group mt="xl">{icons}</Group>
+            {/* <Group mt="xl">{icons}</Group> */}
           </div>
           <div className={classes.form}>
-            <TextInput
-              label="Email"
-              placeholder="your@email.com"
-              required
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-            />
-            <TextInput
-              label="Name"
-              placeholder="John Doe"
-              mt="md"
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-            />
+
             <Textarea
               required
-              label="Your message"
-              placeholder="I want to order your goods"
+              label="The Complain"
+              placeholder="write down the complains presented by patient "
               minRows={4}
               mt="md"
+              value={value} 
+              onChange={(event) => setValue(event.currentTarget.value)}
               classNames={{ input: classes.input, label: classes.inputLabel }}
             />
   
             <Group position="right" mt="md">
-              <Button className={classes.control}>Send message</Button>
+              <Button   onClick={(event) => {event.preventDefault(); dispatch(updateComplains(
+                {by:name,
+                hospital:hospital,
+                uid:user.bio.id,
+                complain:value,
+                timestamp:`${Date.now()}`
+            }))}} className={classes.control}>Save complain</Button>
             </Group>
           </div>
         </SimpleGrid>

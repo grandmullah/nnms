@@ -1,123 +1,307 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
+import {
+  ThemeIcon,
+  Text,
+  Title,
+  Container,
+  SimpleGrid,
+  useMantineTheme,
+  createStyles,
+  Menu,
+  Header,  Group, Center, Burger,  
+} from '@mantine/core';
+import { IconGauge, IconCookie, IconUser, IconMessage2, IconLock, TablerIcon } from '@tabler/icons';
+import { useDisclosure } from '@mantine/hooks';
+import { IconChevronDown } from '@tabler/icons';
+import { MantineLogo } from '@mantine/ds';
+import { FooterLinks } from '@/components/Footer/Index';
 
-const inter = Inter({ subsets: ['latin'] })
+export const MOCKDATA = [
+  {
+    icon: IconGauge,
+    title: 'Extreme performance',
+    description:
+      'This dust is actually a powerful poison that will even make a pro wrestler sick, Regice cloaks itself with frigid air of -328 degrees Fahrenheit',
+  },
+  {
+    icon: IconUser,
+    title: 'Privacy focused',
+    description:
+      'People say it can run at the same speed as lightning striking, Its icy body is so cold, it will not melt even if it is immersed in magma',
+  },
+  {
+    icon: IconCookie,
+    title: 'No third parties',
+    description:
+      'They’re popular, but they’re rare. Trainers who show them off recklessly may be targeted by thieves',
+  },
+  {
+    icon: IconLock,
+    title: 'Secure by default',
+    description:
+      'Although it still can’t fly, its jumping power is outstanding, in Alola the mushrooms on Paras don’t grow up quite right',
+  },
+  {
+    icon: IconMessage2,
+    title: '24/7 Support',
+    description:
+      'Rapidash usually can be seen casually cantering in the fields and plains, Skitty is known to chase around after its own tail',
+  },
+];
 
-export default function Home() {
+interface FeatureProps {
+  icon: TablerIcon;
+  title: React.ReactNode;
+  description: React.ReactNode;
+}
+
+export function Feature({ icon: Icon, title, description }: FeatureProps) {
+  const theme = useMantineTheme();
+  return (
+    <div>
+      <ThemeIcon variant="light" size={40} radius={40}>
+        <Icon size={20} stroke={1.5} />
+      </ThemeIcon>
+      <Text style={{ marginTop: theme.spacing.sm, marginBottom: 7 }}>{title}</Text>
+      <Text size="sm" color="dimmed" style={{ lineHeight: 1.6 }}>
+        {description}
+      </Text>
+    </div>
+  );
+}
+
+const useStyles = createStyles((theme) => ({
+  wrapper: {
+    paddingTop: theme.spacing.xl * 4,
+    paddingBottom: theme.spacing.xl * 4,
+  },
+
+  title: {
+    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+    fontWeight: 900,
+    marginBottom: theme.spacing.md,
+    textAlign: 'center',
+
+    [theme.fn.smallerThan('sm')]: {
+      fontSize: 28,
+      textAlign: 'left',
+    },
+  },
+
+  description: {
+    textAlign: 'center',
+
+    [theme.fn.smallerThan('sm')]: {
+      textAlign: 'left',
+    },
+  },
+  header: {
+    backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
+    borderBottom: 0,
+  },
+
+  inner: {
+    height: 56,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  links: {
+    [theme.fn.smallerThan('sm')]: {
+      display: 'none',
+    },
+  },
+
+  burger: {
+    [theme.fn.largerThan('sm')]: {
+      display: 'none',
+    },
+  },
+
+  link: {
+    display: 'block',
+    lineHeight: 1,
+    padding: '8px 12px',
+    borderRadius: theme.radius.sm,
+    textDecoration: 'none',
+    color: theme.white,
+    fontSize: theme.fontSizes.sm,
+    fontWeight: 500,
+
+    '&:hover': {
+      backgroundColor: theme.fn.lighten(
+        theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
+        0.1
+      ),
+    },
+  },
+
+  linkLabel: {
+    marginRight: 5,
+  },
+}));
+const dat = {
+  "links": [
+    {
+      "link": "/about",
+      "label": "Features"
+    },
+    {
+      "link": "#1",
+      "label": "Learn",
+      "links": [
+        {
+          "link": "/docs",
+          "label": "Documentation"
+        },
+        {
+          "link": "/resources",
+          "label": "Resources"
+        },
+        {
+          "link": "/community",
+          "label": "Community"
+        },
+        {
+          "link": "/blog",
+          "label": "Blog"
+        }
+      ]
+    },
+    {
+      "link": "/about",
+      "label": "About"
+    },
+    {
+      "link": "/pricing",
+      "label": "Pricing"
+    },
+    {
+      "link": "#2",
+      "label": "Support",
+      "links": [
+        {
+          "link": "/faq",
+          "label": "FAQ"
+        },
+        {
+          "link": "/demo",
+          "label": "Book a demo"
+        },
+        {
+          "link": "/forums",
+          "label": "Forums"
+        }
+      ]
+    }
+  ]
+}
+interface FeaturesGridProps {
+  title: React.ReactNode;
+  description: React.ReactNode;
+  data?: FeatureProps[];
+}
+
+interface HeaderSearchProps {
+  links: { link: string; label: string; links: { link: string; label: string }[] }[];
+}
+export default  function FeaturesGrid({ title, description, data = MOCKDATA }: FeaturesGridProps) {
+  const { classes, theme } = useStyles();
+  const features = data.map((feature, index) => <Feature {...feature} key={index} />);
+
   return (
     <>
-      <Head>
-        <title>Create Next App</title>
-        <meta name="description" content="Generated by create next app" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
+    <HeaderMenuColored links={[]}  />
+   
+    <Container className={classes.wrapper}>
 
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
+      
+      <Title className={classes.title}>{'Integrate effortlessly with any technology stack'}</Title>
 
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
+      <Container size={560} p={0}>
+        <Text size="sm" className={classes.description}>
+          {`Every once in a while, you’ll see a Golbat that’s missing some fangs. This happens when hunger drives it to try biting a Steel-type Pokémon.`}
+        </Text>
+      </Container>
 
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+      <SimpleGrid
+        mt={60}
+        cols={3}
+        spacing={theme.spacing.xl * 2}
+        breakpoints={[
+          { maxWidth: 980, cols: 2, spacing: 'xl' },
+          { maxWidth: 755, cols: 1, spacing: 'xl' },
+        ]}
+      >
+        {features}
+      </SimpleGrid>
+    </Container>
+    <FooterLinks data={[]} />
     </>
-  )
+  );
+}
+
+
+
+
+ function HeaderMenuColored({ links }: HeaderSearchProps) {
+  const [opened, { toggle }] = useDisclosure(false);
+  const { classes } = useStyles();
+
+  const items = links.map((link) => {
+    const menuItems = link.links?.map((item) => (
+      <Menu.Item key={item.link}>{item.label}</Menu.Item>
+    ));
+
+    if (menuItems) {
+      return (
+        <Menu key={link.label} trigger="hover" exitTransitionDuration={0}>
+          <Menu.Target>
+            <a
+              href={link.link}
+              className={classes.link}
+              onClick={(event) => event.preventDefault()}
+            >
+              <Center>
+                <span className={classes.linkLabel}>{link.label}</span>
+                <IconChevronDown size={12} stroke={1.5} />
+              </Center>
+            </a>
+          </Menu.Target>
+          <Menu.Dropdown>{menuItems}</Menu.Dropdown>
+        </Menu>
+      );
+    }
+
+    return (
+      <a
+        key={link.label}
+        href={link.link}
+        className={classes.link}
+        onClick={(event) => event.preventDefault()}
+      >
+        {link.label}
+      </a>
+    );
+  });
+
+  return (
+    <Header height={56} className={classes.header} mb={120}>
+      <Container>
+        <div className={classes.inner}>
+          <Text>NNMS</Text>
+          <Group spacing={5} className={classes.links}>
+            {items}
+          </Group>
+          <Burger
+            opened={opened}
+            onClick={toggle}
+            className={classes.burger}
+            size="sm"
+            color="#fff"
+          />
+        </div>
+      </Container>
+    </Header>
+  );
 }

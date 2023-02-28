@@ -3,12 +3,14 @@ import { RootState } from '../store'
 
 export interface AuthState {
     hospital:string,
-    role:string
+    role:string,
+    name:string
 }
 
 const initialState:AuthState = {
     hospital:'',
-    role:''
+    role:'',
+    name:''
 }
 
 export const AuthSlice = createSlice({
@@ -18,6 +20,7 @@ export const AuthSlice = createSlice({
         updateAuth:(state,action:PayloadAction<AuthState>) =>{
             state.hospital = action.payload.hospital
             state.role= action.payload.role
+            state.name= action.payload.name
         }
     }
 })
