@@ -172,7 +172,7 @@ export default function Clinical() {
   return (
     <Grid >
         <Grid.Col span={3}>
-        <Navbar p="md" className={classes.navbar}>
+        <Navbar className={classes.navbar}>
             <Navbar.Section className={classes.header}>
                 <Group position="apart">
                 {/* <Logo width={120} /> */}
@@ -190,8 +190,8 @@ export default function Clinical() {
               <span>Change account</span>
             </a>
 
-            <a href="#" className={classes.link} onClick={(event) => {signOut(auth).then(() => {
-                router.push('/hospital/')
+            <a href="#" className={classes.link} onClick={() => {signOut(auth).then(() => {
+                router.push('/')
               }).catch((error) => {
                 // An error happened.
               });}}>

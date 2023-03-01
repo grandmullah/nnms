@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import AuthReducer from './features/authSlice'
 import BioReducer from './features/triageSlice'
 import ComplainsReducer from './features/complains'
+import HospitalReducer from './features/hospitals'
 
 export const store = configureStore({
   reducer: {
     Auth:AuthReducer,
     Bio:BioReducer,
-    Complains:ComplainsReducer
+    Complains:ComplainsReducer,
+    Hospitals:HospitalReducer
   },
 })
 

@@ -10,7 +10,8 @@ import {
     Container,
     Group,
     Button,
-    Select
+    Select,  CloseButton
+
   } from '@mantine/core';
   import { forwardRef, useState,useEffect} from 'react';
   import { useRouter } from 'next/navigation';
@@ -19,28 +20,15 @@ import {
   import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
   import {app} from  '../../firebase'
-  import { RootState } from '@/app/store';
+  import { AppDispatch, RootState } from '@/app/store';
   import { updateAuth } from '@/app/features/authSlice';
+
+  import { getHospitals, hospital, hospitals } from '@/app/features/hospitals';
   
   const auth = getAuth(app);
   
   
-  const data = [
-    {
-      // image: 'https://img.icons8.com/clouds/256/000000/futurama-bender.png',
-      label: 'Nairobi Hospital',
-      value: '001',
-      description: 'level 4',
-    },
-  
-    {
-      // image: 'https://img.icons8.com/clouds/256/000000/futurama-mom.png',
-      label: 'Kenyatta Hospital',
-      value: '002',
-      description: 'level 4 hospital ',
-    }
-    
-  ];
+
   
   interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
     // image: string;
@@ -68,37 +56,87 @@ import {
   export default function AuthenticationTitle() {
     const router = useRouter();
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
+
+    
+    const [list,setList] = useState<hospital[]>([])
+
+    
 
 
+    
     const [hospital, setHospital] = useState<string>('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-  
+    
     // console.log(hospital, email , password)
   
-  
+    const  hosp = useSelector((state:RootState) => state.Hospitals)
+    const  Auth = useSelector((state:RootState) => state.Auth)
     useEffect(()=>{
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
+      
+      // onAuthStateChanged(auth, async (user) => {
+      //   if (user ) {
 
-          console.log(user)
-          const idTokenResult = await user.getIdTokenResult()
-          router.push(`/hospital/clinical`)
-        //   console.log(idTokenResult)
-        //   if(!idTokenResult.claims.hospital.includes(hospital)){
-        //       toast.error('Auth hospital failed ')
-        //     }
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-        //   router.push('/hospital/doctor')
-          // ...
-        } else {
-          // User is signed out
-          // ...
-        }
-      });
+      //     console.log(user)
+      //     const idTokenResult = await user.getIdTokenResult()
+      //     if(!idTokenResult.claims.hospital.includes(Auth.hospital)){
+      //       await  signOut(auth)
+      //       toast.error('Auth hospital failed ')
+
+      //       console.log('failed her eat useeffect')
+      //     }else{
+      //     router.push(`/hospital/${idTokenResult.claims.role}`)
+      //     }
+      //   //   console.log(idTokenResult)
+      //   //   if(!idTokenResult.claims.hospital.includes(hospital)){
+      //   //       toast.error('Auth hospital failed ')
+      //   //     }
+      //     // User is signed in, see docs for a list of available properties
+      //     // https://firebase.google.com/docs/reference/js/firebase.User
+      //   //   router.push('/hospital/doctor')
+      //     // ...
+      //   } else {
+          
+      //     // User is signed out
+      //     // ...
+      //   }
+      // });
+      const user = auth.currentUser;
+
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        // ...
+
+        user.getIdTokenResult().then( async (idTokenResult)=>{
+          if(!idTokenResult.claims.hospital.includes(Auth.hospital)){
+            await  signOut(auth)
+            toast.error('Auth hospital failed ')
+
+            console.log('failed here at useEffect')
+          }else{
+          router.push(`/hospital/${idTokenResult.claims.role}`)
+          }
+        })
+            
+      } else {
+        // No user is signed in.
+      }
+     
     })
+
+    useEffect(()=> {
+      if(list.length <= 0 ) {
+        dispatch(getHospitals())
+        console.log('called')
+        
+        
+      }
+
+      console.log(hosp)
+      setList(hosp.hospitals)
+    },[list,hosp])
   
   
     const trySignIn = () => {
@@ -113,10 +151,11 @@ import {
         // console.log(idTokenResult)
         if(!idTokenResult.claims.hospital.includes(hospital)){
            await  signOut(auth)
+           console.log('failed hapa')
             toast.error('Auth hospital failed ')
         }else{
           dispatch(updateAuth({role:`${idTokenResult.claims.role}`,hospital:hospital,name:email}))
-        router.push(`/hospital/clinical`)
+        router.push(`/hospital/${idTokenResult.claims.role}`)
         }
         // Check user's county here
       })
@@ -148,7 +187,7 @@ import {
               label="Choose hospital "
               placeholder="Pick one"
               itemComponent={SelectItem}
-              data={data}
+              data={list}
               searchable
               onChange={setHospital}
               maxDropdownHeight={400}
@@ -158,7 +197,7 @@ import {
                   item.description.toLowerCase().includes(value.toLowerCase().trim())
               }
               />
-          <TextInput label="Email" placeholder="you@mantine.dev" required onChange={(event) => setEmail(event.currentTarget.value)} />
+          <TextInput label="Email" placeholder="user@example.com" required onChange={(event) => setEmail(event.currentTarget.value)} />
           <PasswordInput label="Password" placeholder="Your password" required mt="md" onChange={(event) => setPassword(event.currentTarget.value)}/>
           <Group position="apart" mt="lg">
             <Checkbox label="Remember me" sx={{ lineHeight: 1 }} />
@@ -171,9 +210,37 @@ import {
           </Button>
         </Paper>
          <ToastContainer />
+
+         <CookiesBanner/>
       </Container>
     );
   }
   
   
   
+ function CookiesBanner() {
+    return (
+      <Paper withBorder p="lg" radius="md" shadow="md">
+        <Group position="apart" mb="xs">
+          <Text size="md" weight={500}>
+           Test users
+          </Text>
+          <CloseButton mr={-9} mt={-9} />
+        </Group>
+        <Text color="dimmed" size="xs">
+            receptionist  kenyatta Hospital user@example.com SecretPassword
+        </Text>
+        <Text color="dimmed" size="xs">
+            Doctor  Nairobi Hospital user1@example.com SecretPassword
+        </Text>
+        <Group position="right" mt="xs">
+          {/* <Button variant="default" size="xs">
+            Cookies preferences
+          </Button>
+          <Button variant="outline" size="xs">
+            Accept all
+          </Button> */}
+        </Group>
+      </Paper>
+    );
+  }

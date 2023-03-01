@@ -211,7 +211,7 @@ export default  function FeaturesGrid({ title, description, data = MOCKDATA }: F
 
   return (
     <>
-    <HeaderMenuColored links={[]}  />
+    <HeaderMenuColored   links={[]}  />
    
     <Container className={classes.wrapper}>
 
@@ -236,7 +236,7 @@ export default  function FeaturesGrid({ title, description, data = MOCKDATA }: F
         {features}
       </SimpleGrid>
     </Container>
-    <FooterLinks data={[]} />
+    <FooterLinks  />
     </>
   );
 }

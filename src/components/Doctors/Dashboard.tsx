@@ -19,6 +19,7 @@ import { useSelector, } from 'react-redux'
 import { RootState } from '@/app/store';
 import { AuthState } from '@/app/features/authSlice';
 import React from 'react';
+import { useRouter } from 'next/router';
 
 const useStyles = createStyles((theme) => ({
   th: {
@@ -131,6 +132,7 @@ const fetchPatients = async () => {
 export function Dashboard() {
     count = useSelector((state:RootState) =>state.Auth )
     console.log(count)
+    const router = useRouter()
   const [search, setSearch] = useState('');
   const [data,setFetched] = useState<RowData[]>([])
   const [sortedData, setSortedData] = useState<RowData[]>(data);
@@ -169,6 +171,7 @@ export function Dashboard() {
       <td>{row.name}</td>
       <td>{row.email}</td>
       <td>{row.DOB}</td>
+      <td onClick={()=> router.push(`/hospital/doctor/${row.email}`)}> proceed </td>
     </tr>
   ));
 
@@ -209,6 +212,7 @@ export function Dashboard() {
             >
               Age
             </Th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>

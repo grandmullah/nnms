@@ -1,6 +1,7 @@
 import { createStyles, Text, Container, ActionIcon, Group } from '@mantine/core';
 import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
 import { MantineLogo } from '@mantine/ds';
+import { useRouter } from 'next/router';
 
 const useStyles = createStyles((theme) => ({
   footer: {
@@ -105,8 +106,36 @@ interface FooterLinksProps {
   }[];
 }
 
-export function FooterLinks({ data }: FooterLinksProps) {
+export function FooterLinks() {
   const { classes } = useStyles();
+  const router = useRouter()
+  
+    const data= [
+     
+      {
+        "title": "Project",
+        "links": [
+          {
+            "label": "Hospital Management",
+            "link": "/hospital"
+          },
+          {
+            "label": " County Administration",
+            "link": "#"
+          },
+          {
+            "label": "National Admin",
+            "link": "#"
+          },
+          {
+            "label": "Releases",
+            "link": "#"
+          }
+        ]
+      },
+      
+    ]
+  
 
   const groups = data.map((group) => {
     const links = group.links.map((link, index) => (
@@ -115,7 +144,7 @@ export function FooterLinks({ data }: FooterLinksProps) {
         className={classes.link}
         component="a"
         href={link.link}
-        onClick={(event) => event.preventDefault()}
+        onClick={(event) => router.push(link.link)}
       >
         {link.label}
       </Text>
@@ -133,7 +162,7 @@ export function FooterLinks({ data }: FooterLinksProps) {
     <footer className={classes.footer}>
       <Container className={classes.inner}>
         <div className={classes.logo}>
-          <MantineLogo size={30} />
+          {/* <MantineLogo size={30} /> */}
           <Text size="xs" color="dimmed" className={classes.description}>
             Build fully functional accessible web applications faster than ever
           </Text>
@@ -142,7 +171,7 @@ export function FooterLinks({ data }: FooterLinksProps) {
       </Container>
       <Container className={classes.afterFooter}>
         <Text color="dimmed" size="sm">
-          © 2020 mantine.dev. All rights reserved.
+          © 2023 cyphercore.dev. All rights reserved.
         </Text>
 
         <Group spacing={0} className={classes.social} position="right" noWrap>
