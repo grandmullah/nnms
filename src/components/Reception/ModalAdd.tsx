@@ -1,6 +1,9 @@
 import { FC, useState } from 'react';
 import { Modal, } from '@mantine/core';
-import { TextInput, Checkbox, Button, Group, Box,Text } from '@mantine/core';
+import { TextInput, Checkbox, Button, Group, Box,Text,} from '@mantine/core';
+
+
+import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { getFirestore } from "firebase/firestore";
 import {app} from '../../firebase'
@@ -63,7 +66,6 @@ function Demo({closing}:clProps) {
       firstName:'',
       secondName:'',
       surname:'',
-      age:'',
       maritalStatus:'',
       DOB:'',
       tribe:'',
@@ -83,6 +85,10 @@ function Demo({closing}:clProps) {
 
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      id:(value) => (/^[A-Z0-9]+$/.test(value) ? null:  'invalid : should only contain capital letters and numbers' ),
+      firstName:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      secondName:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      surname:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' )
     },
   });
 
@@ -119,15 +125,11 @@ function Demo({closing}:clProps) {
         </Group>
         <Group grow mb="md" mt="md">
         <TextInput
-          withAsterisk
-          label="Age"
-          placeholder="age"
-          {...form.getInputProps('age')}
-        />
-        <TextInput
-          withAsterisk
-          label="Date of Birth"
-          placeholder="dob"
+          // valueFormat="DD/MM/YYYY HH:mm:ss"
+          label="Date input"
+          placeholder="Date input"
+          maw={400}
+          mx="auto"
           {...form.getInputProps('DOB')}
         />
           <TextInput

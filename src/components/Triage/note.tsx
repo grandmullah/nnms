@@ -4,12 +4,12 @@ import { createStyles, Text, Avatar, Group, TypographyStylesProvider, Paper, Sta
 
 const useStyles = createStyles((theme) => ({
     comment: {
-      padding: `${theme.spacing.lg}px ${theme.spacing.xl}px`,
+      color:'white',
     },
   
     body: {
-      paddingLeft: 54,
-      paddingTop: theme.spacing.sm,
+      
+      color:'white',
       fontSize: theme.fontSizes.sm,
     },
   
@@ -36,14 +36,15 @@ export function Notes(data: complain[]) {
   function CommentHtml({by,complain,timestamp,hospital}:complain) {
     const { classes } = useStyles();
     return (
-      <Paper  style={{margin:'2px'}} className={classes.comment}>
+      <div style={{padding:'1px' , border: '2px solid white'}}  >
         <Group>
           {/* <Avatar src={author.image} alt={author.name} radius="xl" /> */}
-          <div>
-            <Text size="sm">By : {by} {hospital}</Text>
-            <Text size="xs" color="dimmed">
+          <div style={{color:'white'}} >
+            <Text size="sm">By : {by} {hospital}
+            <Text size="xs" color="white">
               {new Date(parseInt(timestamp)).toLocaleDateString()}
-            </Text>
+            </Text></Text>
+
           </div>
         </Group>
         <TypographyStylesProvider className={classes.body}>
@@ -52,6 +53,6 @@ export function Notes(data: complain[]) {
         {/* <Text size="xs" color="dimmed">
               {new Date(parseInt(timestamp)).toLocaleDateString()}
             </Text> */}
-      </Paper>
+      </div>
     );
 }

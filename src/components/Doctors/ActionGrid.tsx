@@ -1,5 +1,5 @@
 import { createStyles, Card, Text, SimpleGrid, UnstyledButton, Anchor, Group } from '@mantine/core';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   IconCreditCard,
   IconBuildingBank,
@@ -11,18 +11,19 @@ import {
   IconCashBanknote,
   IconCoin,
 } from '@tabler/icons';
-import { BioData } from '@/app/features/triageSlice';
-import { RootState } from '@/app/store';
-// import { Details } from './Details';
-import React from 'react';
-// import { Complains } from './Complains';
-// import { Vitals } from './Vitals';
-// import { Allergies } from './Allergies';
-// import { FAmilyHistory } from './FamilyHistory';
-// import { SocialHistory } from './SocialHistory';
-// import { MedicalHistory } from './MedicalHistory';
-// import { Medication } from './Medication';
-// import { Review } from './Reviews';
+import { BioData, getUsers } from '@/app/features/triageSlice';
+import { AppDispatch, RootState } from '@/app/store';
+import { Details } from '../Triage/Details';
+import React, { useEffect } from 'react';
+import { Complains } from '../Triage/Complains';
+import { Vitals } from '../Triage/Vitals';
+import { Allergies } from '../Triage/Allergies';
+import { FAmilyHistory } from '../Triage/FamilyHistory';
+import { SocialHistory } from '../Triage/SocialHistory';
+import { MedicalHistory } from '../Triage/MedicalHistory';
+import { Medication } from '../Triage/Medication';
+import { Review } from '../Triage/Reviews';
+import { useRouter } from 'next/router';
 
 const mockdata = [
   { title: 'Complains', icon: IconCreditCard, color: 'violet' },
@@ -64,7 +65,21 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export function ActionsGrid() {
+export function ActionsGridPatients() {
+    const router = useRouter()
+    const dispatch = useDispatch<AppDispatch>()
+    const {id} = router.query
+    console.log( typeof id)
+    if(id) {
+        dispatch(getUsers( id))
+    }
+   
+    // useEffect(()=>{
+    //     if(id){
+    //         dispatch(getUsers(id))
+    //     }
+    // },[id])
+   
   const { classes, theme } = useStyles();
   const [active, setActive] = React.useState('Patient Details');
 
@@ -101,7 +116,7 @@ export function ActionsGrid() {
 
         
         <div style={{ marginTop: '40px', marginBottom: '10px', marginRight: '20px'}} >
-          {/* {active === 'Patient Details' &&  < Details  {...data} />}
+          {active === 'Patient Details' &&  < Details  {...data} />}
           {active === 'Complains' &&  <Complains {...data}/> }
           {active === 'Vital signs' &&  <Vitals/> }
           {active === 'Medications' &&  <Medication/> }
@@ -109,7 +124,7 @@ export function ActionsGrid() {
           {active === 'Social History' &&  <SocialHistory/> }
           {active === 'Reviews' &&  <Review/> }
           {active === 'Allergies' &&  <Allergies/> }
-          {active === 'Family History' &&  <FAmilyHistory/> } */}
+          {active === 'Family History' &&  <FAmilyHistory/> }
           
           
         </div>

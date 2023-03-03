@@ -46,6 +46,7 @@ interface RowData {
   name: string;
   email: string;
   DOB: string;
+  id:string
 }
 
 interface TableSortProps {
@@ -121,7 +122,8 @@ const fetchPatients = async () => {
          let user:RowData = {
             name: doc.data().firstName,
             email: doc.data().email,
-            DOB: doc.data().DOB
+            DOB: doc.data().DOB,
+            id:doc.data().id
          }
          dat.push(user)
       }
@@ -171,7 +173,7 @@ export function Dashboard() {
       <td>{row.name}</td>
       <td>{row.email}</td>
       <td>{row.DOB}</td>
-      <td onClick={()=> router.push(`/hospital/doctor/${row.email}`)}> proceed </td>
+      <td onClick={()=> router.push(`/hospital/doctor/${row.id}`)}> proceed </td>
     </tr>
   ));
 
