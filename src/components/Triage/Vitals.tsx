@@ -8,9 +8,17 @@ import {
     Button,
     Group,
     ActionIcon,
+    rem,
   } from '@mantine/core';
   import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
   import { ContactIconsList } from './Details';
+import { NumberInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useDispatch, useSelector } from 'react-redux';
+import vitals, { updateVitals } from '../../app/features/vitals';
+import { AppDispatch, RootState } from '@/app/store';
+import { BioData } from '@/app/features/triageSlice';
+import { VitalN } from './note';
   
   const useStyles = createStyles((theme) => ({
     wrapper: {
@@ -20,10 +28,10 @@ import {
         theme.colors[theme.primaryColor][7]
       } 100%)`,
       borderRadius: theme.radius.md,
-      padding: theme.spacing.xl * 2.5,
+      padding: `calc(${theme.spacing.xl} * 2.5)`,
   
-      [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-        padding: theme.spacing.xl * 1.5,
+      [theme.fn.smallerThan('sm')]: {
+        padding: `calc(${theme.spacing.xl} * 1.5)`,
       },
     },
   
@@ -35,9 +43,9 @@ import {
   
     description: {
       color: theme.colors[theme.primaryColor][0],
-      maxWidth: 300,
+      maxWidth: rem(300),
   
-      [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      [theme.fn.smallerThan('sm')]: {
         maxWidth: '100%',
       },
     },
@@ -78,53 +86,95 @@ import {
   
   const social = [IconBrandTwitter, IconBrandYoutube, IconBrandInstagram];
   
-  export function Vitals() {
+  export function Vitals({user,}:BioData) {
     const { classes } = useStyles();
+    const dispatch = useDispatch<AppDispatch>()
+    const {name,hospital} =  useSelector((state:RootState) => state.Auth)
+    const form = useForm({
+      initialValues: {
+        bodyWeight: '',
+        bodyTemperature:'',
+        pulseRate:'',
+        bloodPressure:'',
+        respiratoryRate:'',
+      },
   
-    const icons = social.map((Icon, index) => (
-      <ActionIcon key={index} size={28} className={classes.social} variant="transparent">
-        <Icon size={22} stroke={1.5} />
-      </ActionIcon>
-    ));
-  
+    });
+  // dispatch(updateVitals({...values,by:name,
+  // hospital:hospital,uid:user.bio.id,timestamp:Date.now()})
     return (
       <div className={classes.wrapper}>
         <SimpleGrid cols={2} spacing={50} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
           <div>
-            <Title className={classes.title}>Contact us</Title>
-            <Text className={classes.description} mt="sm" mb={30}>
-              Leave your email and we will get back to you within 24 hours
-            </Text>
+            <Title className={classes.title}>previous Vitals Read </Title>
+
+              <VitalN  {...user.vitals}/>
+            
   
-            <ContactIconsList variant="white" />
-  
-            <Group mt="xl">{icons}</Group>
           </div>
           <div className={classes.form}>
-            <TextInput
-              label="Email"
-              placeholder="your@email.com"
-              required
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-            />
-            <TextInput
-              label="Name"
-              placeholder="John Doe"
-              mt="md"
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-            />
-            <Textarea
-              required
-              label="Your message"
-              placeholder="I want to order your goods"
-              minRows={4}
-              mt="md"
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-            />
+          <Group grow>
+              <form onSubmit={form.onSubmit((values: any) => dispatch(updateVitals({...values,hospital:hospital,uid:user.bio.id,timestamp:Date.now()})))}>
+                <Group grow  >
+                  <Text >Body Weight: </Text>
+                  <NumberInput
+                   hideControls
+                  withAsterisk
+                  label="Body Weight"
+                  placeholder="weight in Kgs "
+                  {...form.getInputProps('bodyWeight')}
+                />
+                </Group>
+                <Group grow  >
+                  <Text>Body Temperature</Text>
+                  <NumberInput
+                   hideControls
+                  withAsterisk
+                  label="Temperature"
+                  placeholder=" body temperature"
+                  {...form.getInputProps('bodyTemperature')}
+                />
+                </Group>
+                <Group grow  >
+                <Text>Pulse Rate </Text>
+                  <NumberInput
+                  hideControls
+                  withAsterisk
+                  label="Pulse Rate "
+                  placeholder=" pulse rate "
+                  {...form.getInputProps('pulseRate')}
+                />
+                </Group>
+                <Group grow  >
+                <Text>Blood pressure</Text>
+                  <NumberInput
+                  hideControls
+                  withAsterisk
+                  label="Blood Pressure"
+                  placeholder="blood pressure"
+                  {...form.getInputProps('bloodPressure')}
+                />
+                </Group>
+                <Group grow  >
+                <Text>Respiratory Rate </Text>
+                  <NumberInput
+                  hideControls
+                  withAsterisk
+                  label="Respiratory Rate "
+                  placeholder="Respiratory Rate"
+                  {...form.getInputProps('respiratoryRate')}
+                />
+                </Group>
+               
+
+
+                <Group position="right" mt="md">
+                  <Button type="submit">Submit</Button>
+                </Group>
+              </form>
+            </Group >
   
-            <Group position="right" mt="md">
-              <Button className={classes.control}>Send message</Button>
-            </Group>
+           
           </div>
         </SimpleGrid>
       </div>

@@ -60,6 +60,8 @@ const CK = ({name,user,hospital}:proceed) => {
             // let gg:Array<string> =   (docSnap.data()?.access)
             // let gp = [...gg,hospital]
             // // Set the "capital" field of the city 'DC'
+
+            //set history 
             await updateDoc(pRef, {
              state:{active:true,hospital:hospital}
             });

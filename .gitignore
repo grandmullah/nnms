@@ -34,3 +34,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+src/app/features/._triageSlice.tsx
+src/app/features/._vitals.tsx
+src/components/Doctors/._ActionGrid.tsx
+src/components/Doctors/._Dashboard.tsx
+src/components/Triage/._Allergies.tsx
+src/components/Triage/._note.tsx
+src/components/Triage/._Vitals.tsx
+src/pages/.__app.tsx
+src/pages/hospital/._index.tsx
+src/pages/hospital/reception/._index.tsx
+src/app/._store.tsx
+._package.json
+._.gitignore

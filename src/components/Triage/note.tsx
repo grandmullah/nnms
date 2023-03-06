@@ -1,11 +1,21 @@
 import { Complains } from './Complains';
 import { complain } from '@/app/features/complains';
-import { createStyles, Text, Avatar, Group, TypographyStylesProvider, Paper, Stack } from '@mantine/core';
+import { Vital } from '@/app/features/vitals';
+import { createStyles, Text, Avatar, Group, TypographyStylesProvider, Paper, Stack ,rem, Table } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
     comment: {
       color:'white',
     },
+
+  description: {
+    color: theme.colors[theme.primaryColor][0],
+    maxWidth: rem(300),
+
+    [theme.fn.smallerThan('sm')]: {
+      maxWidth: '100%',
+    },
+  },
   
     body: {
       
@@ -25,7 +35,7 @@ export function Notes(data: complain[]) {
     return  (
         <div>
         {items.map((item) => (
-            <div>
+            <div key={item.timestamp} >
                 <CommentHtml {...item} />
             </div>
               
@@ -39,9 +49,9 @@ export function Notes(data: complain[]) {
       <div style={{padding:'1px' , border: '2px solid white'}}  >
         <Group>
           {/* <Avatar src={author.image} alt={author.name} radius="xl" /> */}
-          <div style={{color:'white'}} >
-            <Text size="sm">By : {by} {hospital}
-            <Text size="xs" color="white">
+          <div >
+            <Text className={classes.description} mt="sm" mb={30} size="sm">By : {by} {hospital}
+            <Text className={classes.description} mt="sm" mb={30} >
               {new Date(parseInt(timestamp)).toLocaleDateString()}
             </Text></Text>
 
@@ -56,3 +66,31 @@ export function Notes(data: complain[]) {
       </div>
     );
 }
+
+export function VitalN(data: Vital[]) {
+    
+  const items =  Object.entries( data[0] || {})?.map(([id,value]) =>  ({ id, ...value }) );
+  const rows = items.map((element) => (
+    <tr key={element.timestamp}>
+      <td>{new Date(parseInt(element.timestamp)).toLocaleDateString()}</td>
+      <td>{element.bodyTemperature}</td>
+      <td>{element.bloodPressure}</td>
+      <td>{element.bodyWeight}</td>
+      <td>{element.respiratoryRate}</td>
+    </tr>
+  ));
+  return  (
+      <Table>
+        <thead>
+        <tr>
+        <th>DAY</th>
+          <th>Body Temperature </th>
+          <th>Blood Pressure</th>
+          <th>Body Weight</th>
+          <th>Respiratory Rate</th>
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+      </Table>
+)}
+

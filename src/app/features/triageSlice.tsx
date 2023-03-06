@@ -4,6 +4,7 @@ import { doc, getDoc, getFirestore} from "firebase/firestore";
 import {app} from '../../firebase'
 import { complain } from './complains';
 import { getDatabase,ref,query,onValue, get,child } from 'firebase/database';
+import { Vital } from './vitals';
 const db = getFirestore(app);
 const  realdb =  getDatabase()
 
@@ -13,6 +14,7 @@ const  realdb =  getDatabase()
 export interface user {
     bio:Bio
     complains:complain[]
+    vitals:Vital[]
 }
 
 export interface Bio {
@@ -40,7 +42,8 @@ const initialState:BioData = {
             DOB:'',
             email:'',
         },
-        complains:[]
+        complains:[],
+        vitals:[]
     },
     loading:'idle',
     error:null
@@ -96,10 +99,10 @@ export const getUsers = createAsyncThunk('getUsers', async (id:string) => {
         const dbRef = ref(realdb, );
 
         if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
             
           const complaints = await get(child(dbRef,`Records/${id}/complains`))
-          console.log(complaints.val(),'sdsds')
+          const vitals = await get(child(dbRef,`Records/${id}/vitals`))
+          
             return {
                 bio:{
                 id: docSnap.data().id,
@@ -109,7 +112,8 @@ export const getUsers = createAsyncThunk('getUsers', async (id:string) => {
                 DOB:docSnap.data().DOB,
                 email:docSnap.data().email,
                 },
-                complains:[complaints.val()]
+                complains:[complaints.val()],
+                vitals:[vitals.val()]
             }
             
         } else {

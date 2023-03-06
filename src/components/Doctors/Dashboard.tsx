@@ -122,7 +122,7 @@ const fetchPatients = async () => {
          let user:RowData = {
             name: doc.data().firstName,
             email: doc.data().email,
-            DOB: doc.data().DOB,
+            DOB: `{doc.data().DOB}`,
             id:doc.data().id
          }
          dat.push(user)

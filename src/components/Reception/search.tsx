@@ -44,11 +44,9 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface RowData { email: string; id: string; firstName: string; 
-  secondName: string; surname: string; age: string; maritalStatus: 
+  secondName: string; surname: string;  maritalStatus: 
   string; DOB: string; tribe: string; religion: string; phoneNumber: string; 
-  nationality: string; county: string; occupation: string; address: string; kinName: string; 
-  kinRelationship: string; kinPhoneNumber: string; kinEmail: string; 
-  kinOccupation: string; kinAddress: string; access:string  }
+access:string  }
 
 interface TableSortProps {
   data: RowData[];
@@ -126,29 +124,28 @@ let count:AuthState
   const querySnapshot = await getDocs(collection(db, "patients"));
   querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
-    // console.log(doc.id, " => ", doc.data());
+    // console.log(doc.id, " => ",  (doc.data().DOB).toDate());
     let user:RowData = {
       email: doc.data().email,
       id:doc.data().id,
       firstName:doc.data().firstName,
       secondName:doc.data().secondName,
       surname:doc.data().surname,
-      age:doc.data().age,
       maritalStatus:doc.data().maritalStatus,
-      DOB:doc.data().DOB,
+      DOB:`${new Date(doc.data().DOB.seconds).toDateString()}`,
       tribe:doc.data().tribe,
       religion:doc.data().religion,
       phoneNumber: doc.data().phoneNumber,
-      nationality:doc.data().nationality,
-      county:doc.data().county,
-      occupation:doc.data().occupation,
-      address:doc.data().address,
-      kinName:doc.data().kinName,
-      kinRelationship:doc.data().kinRelationship,
-      kinPhoneNumber:doc.data().kinPhoneNumber,
-      kinEmail:doc.data().kinEmail,
-      kinOccupation:doc.data().kinOccupation,
-      kinAddress:doc.data().kinAddress,
+      // nationality:doc.data().nationality,
+      // county:doc.data().county,
+      // occupation:doc.data().occupation,
+      // address:doc.data().address,
+      // kinName:doc.data().kinName,
+      // kinRelationship:doc.data().kinRelationship,
+      // kinPhoneNumber:doc.data().kinPhoneNumber,
+      // kinEmail:doc.data().kinEmail,
+      // kinOccupation:doc.data().kinOccupation,
+      // kinAddress:doc.data().kinAddress,
       access:(doc.data().access).includes(count.hospital) ? 'true' :'false'
     }
     
@@ -250,9 +247,9 @@ export default   function Search() {
               Email
             </Th>
             <Th
-              sorted={sortBy === 'age'}
+              sorted={sortBy === 'DOB'}
               reversed={reverseSortDirection}
-              onSort={() => setSorting('age')}
+              onSort={() => setSorting('DOB')}
             >
              DOB
             </Th>

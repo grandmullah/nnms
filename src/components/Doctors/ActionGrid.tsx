@@ -1,4 +1,4 @@
-import { createStyles, Card, Text, SimpleGrid, UnstyledButton, Anchor, Group } from '@mantine/core';
+import { createStyles, Card, Text, SimpleGrid, UnstyledButton, Anchor, Group,rem } from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   IconCreditCard,
@@ -54,12 +54,12 @@ const useStyles = createStyles((theme) => ({
     justifyContent: 'center',
     textAlign: 'center',
     borderRadius: theme.radius.md,
-    height: 90,
+    height: rem(90),
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
     transition: 'box-shadow 150ms ease, transform 100ms ease',
 
     '&:hover': {
-      boxShadow: `${theme.shadows.md} !important`,
+      boxShadow: theme.shadows.md,
       transform: 'scale(1.05)',
     },
   },
@@ -69,7 +69,7 @@ export function ActionsGridPatients() {
     const router = useRouter()
     const dispatch = useDispatch<AppDispatch>()
     const {id} = router.query
-    console.log( typeof id)
+    // console.log( typeof id)
     if(id) {
         dispatch(getUsers( id))
     }
@@ -85,7 +85,7 @@ export function ActionsGridPatients() {
 
   const data = useSelector((state:RootState) => state.Bio)
 
-  console.log(data)
+  // console.log(data)
 
   const items = mockdata.map((item) => (
     <UnstyledButton key={item.title} className={classes.item} onClick={(event) => {event.preventDefault(); setActive(item.title)}}>
@@ -103,7 +103,7 @@ export function ActionsGridPatients() {
           </div>
       <Card className={classes.card}>
         <Group position="apart">
-          <Text className={classes.title}>Services</Text>
+          <Text   onClick={() => router.push('/hospital/doctor')} className={classes.title}>Services</Text>
           {/* <Anchor size="xs" color="dimmed" sx={{ lineHeight: 1 }}>
             + 21 other services
           </Anchor> */}
@@ -118,17 +118,18 @@ export function ActionsGridPatients() {
         <div style={{ marginTop: '40px', marginBottom: '10px', marginRight: '20px'}} >
           {active === 'Patient Details' &&  < Details  {...data} />}
           {active === 'Complains' &&  <Complains {...data}/> }
-          {active === 'Vital signs' &&  <Vitals/> }
+          {active === 'Vital signs' &&  <Vitals  {...data}/> }
           {active === 'Medications' &&  <Medication/> }
           {active === 'Medical history' &&  <MedicalHistory/> }
           {active === 'Social History' &&  <SocialHistory/> }
           {active === 'Reviews' &&  <Review/> }
-          {active === 'Allergies' &&  <Allergies/> }
+          {active === 'Allergies' &&  <Allergies {...data}/> }
           {active === 'Family History' &&  <FAmilyHistory/> }
           
           
         </div>
         </div>
+
       </Card>
     </>
     

@@ -8,10 +8,18 @@ import {
     Button,
     Group,
     ActionIcon,
+    rem
   } from '@mantine/core';
-  import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
+  import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram,IconTrash } from '@tabler/icons';
   import { ContactIconsList } from './Details';
-  
+  import { useForm } from '@mantine/form';
+  import { Switch,  Box, } from '@mantine/core';
+  import { randomId } from '@mantine/hooks';
+  import { getDatabase,ref, set,push } from "firebase/database";
+  import {app} from '../../firebase'
+import { BioData, user } from '@/app/features/triageSlice';
+  const database = getDatabase(app);
+
   const useStyles = createStyles((theme) => ({
     wrapper: {
       minHeight: 400,
@@ -20,10 +28,10 @@ import {
         theme.colors[theme.primaryColor][7]
       } 100%)`,
       borderRadius: theme.radius.md,
-      padding: theme.spacing.xl * 2.5,
+      padding: `calc(${theme.spacing.xl} * 2.5)`,
   
-      [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-        padding: theme.spacing.xl * 1.5,
+      [theme.fn.smallerThan('sm')]: {
+        padding: `calc(${theme.spacing.xl} * 1.5)`,
       },
     },
   
@@ -35,9 +43,9 @@ import {
   
     description: {
       color: theme.colors[theme.primaryColor][0],
-      maxWidth: 300,
+      maxWidth: rem(300),
   
-      [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      [theme.fn.smallerThan('sm')]: {
         maxWidth: '100%',
       },
     },
@@ -78,12 +86,12 @@ import {
   
   const social = [IconBrandTwitter, IconBrandYoutube, IconBrandInstagram];
   
-  export function Allergies() {
+  export function Allergies({user,}:BioData) {
     const { classes } = useStyles();
   
     const icons = social.map((Icon, index) => (
       <ActionIcon key={index} size={28} className={classes.social} variant="transparent">
-        <Icon size={22} stroke={1.5} />
+        <Icon size="1.4rem" stroke={1.5} />
       </ActionIcon>
     ));
   
@@ -91,42 +99,91 @@ import {
       <div className={classes.wrapper}>
         <SimpleGrid cols={2} spacing={50} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
           <div>
-            <Title className={classes.title}>Contact us</Title>
+            <Title className={classes.title}>Allergies</Title>
             <Text className={classes.description} mt="sm" mb={30}>
-              Leave your email and we will get back to you within 24 hours
+              
             </Text>
   
             <ContactIconsList variant="white" />
   
             <Group mt="xl">{icons}</Group>
           </div>
-          <div className={classes.form}>
-            <TextInput
-              label="Email"
-              placeholder="your@email.com"
-              required
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-            />
-            <TextInput
-              label="Name"
-              placeholder="John Doe"
-              mt="md"
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-            />
-            <Textarea
-              required
-              label="Your message"
-              placeholder="I want to order your goods"
-              minRows={4}
-              mt="md"
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-            />
-  
-            <Group position="right" mt="md">
-              <Button className={classes.control}>Send message</Button>
-            </Group>
-          </div>
+            <Demo {...user}/>
         </SimpleGrid>
       </div>
     );
   }
+
+
+
+
+function Demo(user:user) {
+  
+  const form = useForm({
+    initialValues: {
+      allergy: [{ name: '',  key: randomId() }],
+    },
+  });
+
+  const fields = form.values.allergy.map((item, index) => (
+    <Group key={item.key} mt="xs">
+      <TextInput
+        placeholder="Asthma"
+        withAsterisk
+        sx={{ flex: 1 }}
+        {...form.getInputProps(`allergy.${index}.name`)}
+      />
+      <ActionIcon color="red" onClick={() => form.removeListItem('allergy', index)}>
+        <IconTrash size="1rem" />
+      </ActionIcon>
+    </Group>
+  ));
+
+  return (
+    <Box maw={500} mx="auto">
+      {fields.length > 0 ? (
+        <Group mb="xs">
+          <Text weight={500} size="sm" sx={{ flex: 1 }}>
+            Name
+          </Text>
+        </Group>
+      ) : (
+        <Text color="black" align="center">
+          No Allergy here...
+        </Text>
+      )}
+
+      {fields}
+
+      <Group position="center" mt="md">
+        <Button
+          onClick={() =>
+            form.insertListItem('allergy', { name: '', key: randomId() })
+          }
+        >
+          Add Another Allergy
+        </Button>
+        <Group>
+      <Button
+          onClick={() =>{
+            try {
+              const postComplainRef = ref(database, `Records/${user.bio.id}/allergies`);
+              const newPostRef = push(postComplainRef);
+              set(newPostRef,form.values.allergy);
+            } catch (error) {
+              console.log(error)
+            }
+            
+           }}
+        >
+          save
+        </Button>
+      </Group>
+
+      </Group>
+     
+
+    
+    </Box>
+  );
+}

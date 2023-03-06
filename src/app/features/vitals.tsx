@@ -9,44 +9,48 @@ const db = getDatabase(app);
 
 
 
-export interface complain {
+export interface Vital {
     by:string
     hospital:string,
     uid:string,
-    complain:string,
+    bodyWeight: string,
+    bodyTemperature:string,
+    pulseRate:string,
+    bloodPressure:string,
+    respiratoryRate:string,
     timestamp:string,
 }
 
-export interface complainsState {
+export interface vitalsState {
 
     loading:'idle' | 'pending' | 'succeeded' | 'failed',
     error:string | null
 }
 
-const initialState:complainsState = {
+const initialState:vitalsState = {
 
     loading:'idle',
     error:null
 }
 
-export const ComplainsSlice = createSlice({
-    name: 'complains',
+export const VitalSlice = createSlice({
+    name: 'vitals',
     initialState,
     reducers: {
     },
     extraReducers: (builder) => {
-        builder.addCase(updateComplains.pending, (state, action) => {
+        builder.addCase(updateVitals.pending, (state, action) => {
           if (state.loading === 'idle') {
             state.loading = 'pending'
           }
         })
-        builder.addCase(updateComplains.fulfilled, (state, action) => {
+        builder.addCase(updateVitals.fulfilled, (state, action) => {
           if (state.loading === 'pending') {
        
             state.loading = 'idle'
           }
         })
-        builder.addCase(updateComplains.rejected, (state, action) => {
+        builder.addCase(updateVitals.rejected, (state, action) => {
           if (state.loading === 'pending') {
             state.loading = 'idle'
             state.error = 'Error occured'
@@ -58,12 +62,13 @@ export const ComplainsSlice = createSlice({
 
 
 
-export const updateComplains = createAsyncThunk('updateComplains', async (data:complain) => {
+export const updateVitals = createAsyncThunk('updateVitals', async (data:Vital) => {
+    console.log(data)
     try {
-        const postComplainRef = ref(db, `Records/${data.uid}/complains`);
+        const postVitalRef = ref(db, `Records/${data.uid}/vitals`);
 
         
-        const newPostRef = push(postComplainRef);
+        const newPostRef = push(postVitalRef);
         set(newPostRef,data);
 
     } catch (error) {
@@ -76,5 +81,5 @@ export const updateComplains = createAsyncThunk('updateComplains', async (data:c
 
 
 // export const {getUsers}  = BioSlice.actions
-export  const updateComplain = (state:RootState) => state.Complains
-export default ComplainsSlice.reducer
+export  const updateVital = (state:RootState) => state.Complains
+export default VitalSlice.reducer

@@ -75,33 +75,6 @@ import {
     const  Auth = useSelector((state:RootState) => state.Auth)
     useEffect(()=>{
       
-      // onAuthStateChanged(auth, async (user) => {
-      //   if (user ) {
-
-      //     console.log(user)
-      //     const idTokenResult = await user.getIdTokenResult()
-      //     if(!idTokenResult.claims.hospital.includes(Auth.hospital)){
-      //       await  signOut(auth)
-      //       toast.error('Auth hospital failed ')
-
-      //       console.log('failed her eat useeffect')
-      //     }else{
-      //     router.push(`/hospital/${idTokenResult.claims.role}`)
-      //     }
-      //   //   console.log(idTokenResult)
-      //   //   if(!idTokenResult.claims.hospital.includes(hospital)){
-      //   //       toast.error('Auth hospital failed ')
-      //   //     }
-      //     // User is signed in, see docs for a list of available properties
-      //     // https://firebase.google.com/docs/reference/js/firebase.User
-      //   //   router.push('/hospital/doctor')
-      //     // ...
-      //   } else {
-          
-      //     // User is signed out
-      //     // ...
-      //   }
-      // });
       const user = auth.currentUser;
 
       if (user) {

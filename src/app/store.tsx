@@ -3,13 +3,15 @@ import AuthReducer from './features/authSlice'
 import BioReducer from './features/triageSlice'
 import ComplainsReducer from './features/complains'
 import HospitalReducer from './features/hospitals'
+import VitalReducer from './features/vitals'
 
 export const store = configureStore({
   reducer: {
     Auth:AuthReducer,
     Bio:BioReducer,
     Complains:ComplainsReducer,
-    Hospitals:HospitalReducer
+    Hospitals:HospitalReducer,
+    Vitals:VitalReducer
   },
 })
 

@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
 import { Modal, } from '@mantine/core';
-import { TextInput, Checkbox, Button, Group, Box,Text,} from '@mantine/core';
-
-
-import { DateInput } from '@mantine/dates';
+import { TextInput, Checkbox, Button, Group, Box,Text,Select} from '@mantine/core';
+import 'dayjs/locale/es'
+import { notifications } from '@mantine/notifications';
+import { DatePickerInput,DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { getFirestore } from "firebase/firestore";
 import {app} from '../../firebase'
@@ -11,6 +11,8 @@ const db = getFirestore(app)
 import { doc, setDoc } from "firebase/firestore";
 import { useSelector, } from 'react-redux' 
 import { RootState } from '@/app/store';
+import dayjs from 'dayjs';
+import { IconCalendar, IconCheck } from '@tabler/icons';
 
 interface clProps{
   closing:(value:boolean) =>void
@@ -48,16 +50,33 @@ export function AddPatient() {
  
 
 function Demo({closing}:clProps) {
+
   const count = useSelector((state:RootState) =>state.Auth )
 
-  const regis = async  (values: { email: string; id: string; firstName: string; secondName: string; surname: string; age: string; maritalStatus: string; DOB: string; tribe: string; religion: string; phoneNumber: string; nationality: string; county: string; occupation: string; address: string; kinName: string; kinRelationship: string; kinPhoneNumber: string; kinEmail: string; kinOccupation: string; kinAddress: string; }) => {
-  
+  const regis = async  (values: { email: string; id: string; firstName: string; secondName: string; surname: string;  maritalStatus: string; DOB: string; tribe: string; religion: string; phoneNumber: string; nationality: string; county: string; occupation: string; address: string; kinName: string; kinRelationship: string; kinPhoneNumber: string; kinEmail: string; kinOccupation: string; kinAddress: string; }) => {
+    notifications.show({
+      id: 'load-data',
+      loading: true,
+      title: 'Loading your data',
+      message: 'saving to database',
+      autoClose: false,
+      withCloseButton: false,
+    });
    
     console.log(count)
    
     console.log(values)
    await setDoc(doc(db, "patients", values.id), {...values, access:[count.hospital], registered:Date.now(),});
+   
     closing(false)
+    notifications.update({
+      id: 'load-data',
+      color: 'teal',
+      title: 'Data was loaded',
+      message: 'NData saved successfullty',
+      icon: <IconCheck size="1rem" />,
+      autoClose: 2000,
+    });
   }
   const form = useForm({
     initialValues: {
@@ -88,7 +107,20 @@ function Demo({closing}:clProps) {
       id:(value) => (/^[A-Z0-9]+$/.test(value) ? null:  'invalid : should only contain capital letters and numbers' ),
       firstName:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
       secondName:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
-      surname:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' )
+      surname:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      maritalStatus:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      DOB:(value) => (/[a-zA-Z0-9]/.test(value) ? null:  'invalid : should only contain letters' ),
+      phoneNumber:(value) => (/[0-9]/.test(value) ? null:  'invalid : should only contain Numbers' ),
+      address:(value) => (/[a-zA-Z0-9]/.test(value) ? null:  'invalid : should only contain letters' ),
+      nationality:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      religion:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      tribe:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      occupation:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      kinName:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      kinRelationship:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      kinOccupation:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      kinPhoneNumber:(value) => (/[0-9]/.test(value) ? null:  'invalid : should only contain Numbers' ),
+
     },
   });
 
@@ -124,18 +156,25 @@ function Demo({closing}:clProps) {
         />
         </Group>
         <Group grow mb="md" mt="md">
-        <TextInput
-          // valueFormat="DD/MM/YYYY HH:mm:ss"
-          label="Date input"
+        <DatePickerInput
+         icon={<IconCalendar size="1.1rem" stroke={1.5} />}
+          valueFormat="YYYY MMM DD"
+          label="Date of Birth"
           placeholder="Date input"
+          maxDate={dayjs(new Date()).toDate()}
           maw={400}
           mx="auto"
           {...form.getInputProps('DOB')}
         />
-          <TextInput
+        <Select
           withAsterisk
-          label="Marital Status "
-          placeholder="Marital Status"
+          label="Marital Status"
+          placeholder="Pick one"
+          data={[
+            { value: 'Single', label: 'Single' },
+            { value: 'Married', label: 'Married' },
+            { value: 'Divorced', label: 'Divorced' },
+          ]}
           {...form.getInputProps('maritalStatus')}
         />
         </Group>
@@ -146,36 +185,56 @@ function Demo({closing}:clProps) {
           placeholder="mobile Number "
           {...form.getInputProps('phoneNumber')}
         />
-        <TextInput
-          withAsterisk
+        <Select
           label="County of Residence"
-          placeholder="county"
+          placeholder="Pick one"
+          withAsterisk
+          data={[
+            { value: '047, Nairobi', label: 'Nairobi County' },
+            { value: '028, Elgeyo-Marakwet', label: 'Elgeyo-Marakwet County' },
+            { value: '001,Mombasa County ', label: 'Mombasa County' },
+          ]}
           {...form.getInputProps('county')}
         />
           <TextInput
           withAsterisk
           label="Address"
-          placeholder="address"
+          placeholder="000, Nairobi"
           {...form.getInputProps('address')}
         />
         </Group>
         <Group grow mb="md" mt="md">
-        <TextInput
-          withAsterisk
+        <Select
           label="Tribe"
           placeholder="tribe"
+          withAsterisk
+          data={[
+            { value: 'Kalenjin', label: 'Kalenjin' },
+            { value: 'Somali', label: 'Somali' },
+            { value: 'Kikuyu', label: 'Kikuuyu' },
+          ]}
           {...form.getInputProps('tribe')}
         />
-        <TextInput
-          withAsterisk
+        <Select
           label="Religion"
           placeholder="religion"
+          withAsterisk
+          data={[
+            { value: 'Muslim', label: 'Muslim' },
+            { value: 'Christian', label: 'Christian' },
+            { value: 'Budhaa', label: 'Budhaa' },
+          ]}
           {...form.getInputProps('religion')}
         />
-          <TextInput
-          withAsterisk
+        <Select
           label="Nationality"
-          placeholder="Nationality"
+          placeholder="natioanality"
+          withAsterisk
+          data={[
+            { value: 'Kenyan', label: 'Kenyan' },
+            { value: 'East Africa', label: ' East Africa commuunity' },
+            { value: 'African', label: 'African' },
+          ]}
           {...form.getInputProps('nationality')}
         />
         </Group>
@@ -195,7 +254,7 @@ function Demo({closing}:clProps) {
     
         </Group>
         <Group >
-          <Text> Next of Kin </Text>
+          <Text> NEXT OF KIN </Text>
         </Group>
         <Group grow mb="md" mt="md">
         <TextInput
@@ -216,9 +275,9 @@ function Demo({closing}:clProps) {
           placeholder="Phone Number"
           {...form.getInputProps('kinPhoneNumber')}
         />
-        </Group><Group grow mb="md" mt="md">
+        </Group>
+        <Group grow mb="md" mt="md">
         <TextInput
-          withAsterisk
           label="Email"
           placeholder="your@email.com"
           {...form.getInputProps('kinEmail')}
@@ -232,7 +291,7 @@ function Demo({closing}:clProps) {
           <TextInput
           withAsterisk
           label="Address"
-          placeholder="address"
+          placeholder="location addresss"
           {...form.getInputProps('kinAddress')}
         />
         </Group>

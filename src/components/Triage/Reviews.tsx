@@ -8,6 +8,7 @@ import {
     Button,
     Group,
     ActionIcon,
+    rem
   } from '@mantine/core';
   import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
   import { ContactIconsList } from './Details';
@@ -20,10 +21,10 @@ import {
         theme.colors[theme.primaryColor][7]
       } 100%)`,
       borderRadius: theme.radius.md,
-      padding: theme.spacing.xl * 2.5,
+      padding: `calc(${theme.spacing.xl} * 2.5)`,
   
-      [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-        padding: theme.spacing.xl * 1.5,
+      [theme.fn.smallerThan('sm')]: {
+        padding: `calc(${theme.spacing.xl} * 1.5)`,
       },
     },
   
@@ -35,9 +36,9 @@ import {
   
     description: {
       color: theme.colors[theme.primaryColor][0],
-      maxWidth: 300,
+      maxWidth: rem(300),
   
-      [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      [theme.fn.smallerThan('sm')]: {
         maxWidth: '100%',
       },
     },
@@ -75,7 +76,6 @@ import {
       backgroundColor: theme.colors[theme.primaryColor][6],
     },
   }));
-  
   const social = [IconBrandTwitter, IconBrandYoutube, IconBrandInstagram];
   
   export function Review() {
