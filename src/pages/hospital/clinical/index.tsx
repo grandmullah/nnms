@@ -10,7 +10,7 @@ import {
   IconSwitchHorizontal,
   IconLogout,
 } from '@tabler/icons';
-import { LinksGroup } from './NavbarLinksGroup';
+import   {LinksGroup} from '../../../components/Triage/NavbarLinksGroup';
 import { ActionsGrid } from '@/components/Triage/Dashboard';
 
 import { DocumentReference, getFirestore, getDocs,collection } from "firebase/firestore";

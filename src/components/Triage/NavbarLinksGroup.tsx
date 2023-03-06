@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, Text, UnstyledButton, createStyles } from '@mantine/core';
 import { TablerIcon, IconCalendarStats, IconChevronLeft, IconChevronRight } from '@tabler/icons';
+import { RowData } from '../../pages/hospital/clinical';
+import { useSelector, useDispatch } from 'react-redux'
+import { getUsers } from '@/app/features/triageSlice';
+import { AppDispatch } from '@/app/store';
 
 const useStyles = createStyles((theme) => ({
   control: {
@@ -25,7 +29,7 @@ const useStyles = createStyles((theme) => ({
     paddingLeft: 31,
     marginLeft: 30,
     fontSize: theme.fontSizes.sm,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
+    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.dark[0],
     borderLeft: `1px solid ${
       theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
     }`,
@@ -45,10 +49,11 @@ interface LinksGroupProps {
   icon: TablerIcon;
   label: string;
   initiallyOpened?: boolean;
-  links?: { label: string; link: string }[];
+  links?: RowData[];
 }
 
-export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksGroupProps) {
+export  function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksGroupProps) {
+  const   dispatch = useDispatch<AppDispatch>()
   const { classes, theme } = useStyles();
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
@@ -57,9 +62,9 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
     <Text<'a'>
       component="a"
       className={classes.link}
-      href={link.link}
+      href={link.name}
       key={link.label}
-      onClick={(event) => {event.preventDefault(); console.log('a')}}
+      onClick={(event) => {event.preventDefault(); dispatch(getUsers(link.label))}}
     >
       {link.label}
     </Text>
@@ -74,7 +79,7 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
               <Icon size={18} />
             </ThemeIcon>
             <Box ml="md"   onClick={(event) => {event.preventDefault(); console.log('b')}}>{label}</Box>
-            {'dhdhfdhf'}
+            
           </Box>
           {hasLinks && (
             <ChevronIcon
@@ -90,29 +95,5 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
       </UnstyledButton>
       {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
-  );
-}
-
-const mockdata = {
-  label: 'Releases',
-  icon: IconCalendarStats,
-  links: [
-    { label: 'Upcoming releases', link: '/' },
-    { label: 'Previous releases', link: '/' },
-    { label: 'Releases schedule', link: '/' },
-  ],
-};
-
-export function NavbarLinksGroup() {
-  return (
-    <Box
-      sx={(theme) => ({
-        minHeight: 220,
-        padding: theme.spacing.md,
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.white,
-      })}
-    >
-      <LinksGroup {...mockdata} />
-    </Box>
   );
 }
