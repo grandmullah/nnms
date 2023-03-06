@@ -103,12 +103,12 @@ export function ActionsGrid() {
         <div style={{ marginTop: '40px', marginBottom: '10px', marginRight: '20px'}} >
           {active === 'Patient Details' &&  < Details  {...data} />}
           {active === 'Complains' &&  <Complains {...data}/> }
-          {active === 'Vital signs' &&  <Vitals/> }
+          {active === 'Vital signs' &&  <Vitals {...data}/> }
           {active === 'Medications' &&  <Medication/> }
           {active === 'Medical history' &&  <MedicalHistory/> }
           {active === 'Social History' &&  <SocialHistory/> }
           {active === 'Reviews' &&  <Review/> }
-          {active === 'Allergies' &&  <Allergies/> }
+          {active === 'Allergies' &&  <Allergies {...data}/> }
           {active === 'Family History' &&  <FAmilyHistory/> }
           
           

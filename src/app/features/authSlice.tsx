@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
 export interface AuthState {
-    hospital:string,
+    hospital:string ,
     role:string,
     name:string
 }

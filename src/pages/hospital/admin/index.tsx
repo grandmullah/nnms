@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { EmployeeTable,  } from '../../../components/Admin/employees';
-import { Navbar, Center, Tooltip, UnstyledButton, createStyles, Stack, Grid } from '@mantine/core';
+import { Navbar, Center, Tooltip, UnstyledButton, createStyles, Stack, Grid,rem } from '@mantine/core';
 import {
   TablerIcon,
   IconHome2,
@@ -17,10 +17,11 @@ import { MantineLogo } from '@mantine/ds';
 import { Medicine } from '@/components/Admin/Medicine';
 import { OrderPharmaceuticals } from '@/components/Admin/AddOrder';
 
+
 const useStyles = createStyles((theme) => ({
   link: {
-    width: 50,
-    height: 50,
+    width: rem(50),
+    height: rem(50),
     borderRadius: theme.radius.md,
     display: 'flex',
     alignItems: 'center',
@@ -54,13 +55,12 @@ interface NavbarLinkProps {
   active?: boolean;
   onClick?(): void;
 }
-
 function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
   const { classes, cx } = useStyles();
   return (
-    <Tooltip label={label} position="right" transitionDuration={0}>
+    <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
       <UnstyledButton onClick={onClick} className={cx(classes.link, { [classes.active]: active })}>
-        <Icon stroke={1.5} />
+        <Icon size="1.2rem" stroke={1.5} />
       </UnstyledButton>
     </Tooltip>
   );

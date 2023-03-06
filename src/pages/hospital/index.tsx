@@ -65,7 +65,7 @@ import {
 
 
     
-    const [hospital, setHospital] = useState<string>('');
+    const [hospital, setHospital] = useState<string >('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     
@@ -162,7 +162,7 @@ import {
               itemComponent={SelectItem}
               data={list}
               searchable
-              onChange={setHospital}
+              onChange={(value:string)=>setHospital}
               maxDropdownHeight={400}
               nothingFound="Nobody here"
               filter={(value, item) =>
