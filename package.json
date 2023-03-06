@@ -2,7 +2,7 @@
   "name": "pro",
   "version": "0.1.0",
   "private": true,
-  "homepage": "./",
+  "homepage": "https://grandmullah.github.io/nnms/",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
