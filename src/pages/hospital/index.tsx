@@ -138,6 +138,10 @@ import {
         const errorMessage = error.message;
       });
     }
+    const ff = (value: string) => {
+      console.log(value)
+      setHospital(value)
+    }
   
     return (
       <Container size={420} my={40}>
@@ -162,7 +166,7 @@ import {
               itemComponent={SelectItem}
               data={list}
               searchable
-              onChange={(value:string)=>setHospital}
+              onChange={ff}
               maxDropdownHeight={400}
               nothingFound="Nobody here"
               filter={(value, item) =>
