@@ -96,10 +96,13 @@ export const getUsers = createAsyncThunk('getUsers', async (id:string | string[]
 
 
     try {
+      let jj:string =''
       if (typeof id === 'string'){
+        jj = id
+      }
         
       
-        const docRef = doc(db, "patients", id);
+        const docRef = doc(db, "patients", jj);
         const docSnap = await getDoc(docRef);
         const dbRef = ref(realdb, );
 
@@ -120,7 +123,7 @@ export const getUsers = createAsyncThunk('getUsers', async (id:string | string[]
                 complains:[complaints.val()],
                 vitals:[vitals.val()]
             }
-          } 
+          
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
