@@ -92,8 +92,13 @@ export const BioSlice = createSlice({
 //       }
 // }
 
-export const getUsers = createAsyncThunk('getUsers', async (id:string) => {
+export const getUsers = createAsyncThunk('getUsers', async (id:string | string[]) => {
+
+
     try {
+      if (typeof id === 'string'){
+        
+      
         const docRef = doc(db, "patients", id);
         const docSnap = await getDoc(docRef);
         const dbRef = ref(realdb, );
@@ -115,7 +120,7 @@ export const getUsers = createAsyncThunk('getUsers', async (id:string) => {
                 complains:[complaints.val()],
                 vitals:[vitals.val()]
             }
-            
+          } 
         } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
