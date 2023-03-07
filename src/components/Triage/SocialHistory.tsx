@@ -92,17 +92,17 @@ import {
       <div className={classes.wrapper}>
         <SimpleGrid cols={2} spacing={50} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
           <div>
-            <Title className={classes.title}>Contact us</Title>
-            <Text className={classes.description} mt="sm" mb={30}>
+            <Title className={classes.title}>Social History</Title>
+            {/* <Text className={classes.description} mt="sm" mb={30}>
               Leave your email and we will get back to you within 24 hours
             </Text>
   
             <ContactIconsList variant="white" />
-  
+   */}
             <Group mt="xl">{icons}</Group>
           </div>
           <div className={classes.form}>
-            <TextInput
+            {/* <TextInput
               label="Email"
               placeholder="your@email.com"
               required
@@ -113,18 +113,18 @@ import {
               placeholder="John Doe"
               mt="md"
               classNames={{ input: classes.input, label: classes.inputLabel }}
-            />
+            /> */}
             <Textarea
               required
-              label="Your message"
-              placeholder="I want to order your goods"
+              label="Yournotes"
+              placeholder="write down the history"
               minRows={4}
               mt="md"
               classNames={{ input: classes.input, label: classes.inputLabel }}
             />
   
             <Group position="right" mt="md">
-              <Button className={classes.control}>Send message</Button>
+              <Button className={classes.control}>Save</Button>
             </Group>
           </div>
         </SimpleGrid>

@@ -69,6 +69,7 @@ export function ActionsGrid() {
   const [active, setActive] = React.useState('Patient Details');
 
   const data = useSelector((state:RootState) => state.Bio)
+  
 
   console.log(data)
 

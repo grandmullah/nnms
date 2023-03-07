@@ -24,6 +24,7 @@ export interface Bio {
     gender:string,
     DOB:string,
     email:string,
+    stage:string
 }
 
 export interface BioData {
@@ -41,6 +42,7 @@ const initialState:BioData = {
             gender:'',
             DOB:'',
             email:'',
+            stage:''
         },
         complains:[],
         vitals:[]
@@ -117,8 +119,9 @@ export const getUsers = createAsyncThunk('getUsers', async (id:string | string[]
                 name: docSnap.data().firstName,
                 phoneNumber:docSnap.data().phoneNumber,
                 gender:docSnap.data().gender,
-                DOB:docSnap.data().DOB,
+                DOB:`${(docSnap.data().DOB).toDate()}`,
                 email:docSnap.data().email,
+                stage:docSnap.data().state.stage
                 },
                 complains:[complaints.val()],
                 vitals:[vitals.val()]

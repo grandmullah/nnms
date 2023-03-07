@@ -58,3 +58,8 @@ src/components/Reception/._proceedVist.tsx
 src/components/Reception/._ModalAdd.tsx
 src/components/Reception/._search.tsx
 src/components/Footer/._Hero.tsx
+src/components/Triage/._MedicalHistory.tsx
+src/components/Triage/._Medication.tsx
+src/components/Triage/._SocialHistory.tsx
+src/components/Triage/._FamilyHistory.tsx
+src/components/Triage/._Complains.tsx

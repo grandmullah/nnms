@@ -122,14 +122,15 @@ const useStyles = createStyles((theme) => ({
             />
   
             <Group position="right" mt="md">
-              <Button   onClick={(event) => {event.preventDefault(); dispatch(updateComplains(
+              {loading === 'idle' ?  <Button   onClick={(event) => {event.preventDefault(); dispatch(updateComplains(
                 {by:name,
                 hospital:hospital,
                 uid:user.bio.id,
                 complain:value,
                 timestamp:`${Date.now()}`
             }))
-            }} className={classes.control}>Save complain</Button>
+            }} className={classes.control}>Save complain</Button> : <Button disabled >save</Button>}
+              
             </Group>
           </div>
         </SimpleGrid>

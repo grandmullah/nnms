@@ -104,7 +104,7 @@ import { BioData, user } from '@/app/features/triageSlice';
               
             </Text>
   
-            <ContactIconsList variant="white" />
+            {/* <ContactIconsList variant="white" /> */}
   
             <Group mt="xl">{icons}</Group>
           </div>

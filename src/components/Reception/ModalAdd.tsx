@@ -53,7 +53,7 @@ function Demo({closing}:clProps) {
 
   const count = useSelector((state:RootState) =>state.Auth )
 
-  const regis = async  (values: { email: string; id: string; firstName: string; secondName: string; surname: string;  maritalStatus: string; DOB: string; tribe: string; religion: string; phoneNumber: string; nationality: string; county: string; occupation: string; address: string; kinName: string; kinRelationship: string; kinPhoneNumber: string; kinEmail: string; kinOccupation: string; kinAddress: string; }) => {
+  const regis = async  (values: { email: string; id: string; firstName: string; secondName: string; gender:string, surname: string;  maritalStatus: string; DOB: string; tribe: string; religion: string; phoneNumber: string; nationality: string; county: string; occupation: string; address: string; kinName: string; kinRelationship: string; kinPhoneNumber: string; kinEmail: string; kinOccupation: string; kinAddress: string; }) => {
     console.log(values)
     try {
       notifications.show({
@@ -103,7 +103,7 @@ function Demo({closing}:clProps) {
         }),
       })
    }}
-   
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -113,6 +113,7 @@ function Demo({closing}:clProps) {
       surname:'',
       maritalStatus:'',
       DOB:'',
+      gender:'',
       tribe:'',
       religion:'',
       phoneNumber: '',
@@ -140,6 +141,7 @@ function Demo({closing}:clProps) {
       address:(value) => (/[a-zA-Z0-9]/.test(value) ? null:  'invalid : should only contain letters' ),
       nationality:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
       religion:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
+      gender:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
       tribe:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
       occupation:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
       kinName:(value) => (/[a-zA-Z]/.test(value) ? null:  'invalid : should only contain letters' ),
@@ -202,6 +204,16 @@ function Demo({closing}:clProps) {
             { value: 'Divorced', label: 'Divorced' },
           ]}
           {...form.getInputProps('maritalStatus')}
+        />
+        <Select
+          withAsterisk
+          label="Gender"
+          placeholder="Pick one"
+          data={[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'female' },
+          ]}
+          {...form.getInputProps('gender')}
         />
         </Group>
         <Group grow mb="md" mt="md">
