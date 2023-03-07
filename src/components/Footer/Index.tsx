@@ -117,7 +117,7 @@ export function FooterLinks() {
         "links": [
           {
             "label": "Hospital Management",
-            "link": "/hospital"
+            "link": "/nnms/hospital"
           },
           {
             "label": " County Administration",
