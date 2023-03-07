@@ -169,7 +169,7 @@ function Demo(user:user) {
             try {
               const postComplainRef = ref(database, `Records/${user.bio.id}/allergies`);
               const newPostRef = push(postComplainRef);
-              set(newPostRef,form.values.allergy);
+              set(newPostRef,{...form.values.allergy});
             } catch (error) {
               console.log(error)
             }

@@ -59,7 +59,7 @@ function Demo({hospital,user,phoneNumber}:accessProps ) {
       id: 'load-data',
       loading: true,
       title: 'Loading your data',
-      message: 'Data will be loaded in 3 seconds, you cannot close this yet',
+      message: 'Data is being loaded wait for successfull notification',
       autoClose: false,
       withCloseButton: false,
     });
@@ -79,7 +79,7 @@ function Demo({hospital,user,phoneNumber}:accessProps ) {
           id: 'load-data',
           color: 'teal',
           title: 'Data was loaded',
-          message: 'Notification will close in 2 seconds, you can close this notification now',
+          message: 'successfully updated database , you now have access',
           icon: <IconCheck size="1rem" />,
           autoClose: 2000,
         });
@@ -88,8 +88,8 @@ function Demo({hospital,user,phoneNumber}:accessProps ) {
         console.log('wrong number')
         notifications.update({
           id: 'load-data',
-          title: 'Default notification',
-          message: 'Hey there, your code is awesome! 🤥',
+          title: 'Error notification',
+          message: 'Hey there, your code is wrong! 🤥',
           icon: <IconX size="1rem"  color="red"/>,
           styles: (theme) => ({
             root: {

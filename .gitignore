@@ -52,3 +52,9 @@ src/pages/._index.tsx
 src/app/features/._authSlice.tsx
 src/components/Triage/._Dashboard.tsx
 src/pages/hospital/admin/._index.tsx
+src/components/Doctors/._prescripe.tsx
+src/components/Reception/._ModalAccess.tsx
+src/components/Reception/._proceedVist.tsx
+src/components/Reception/._ModalAdd.tsx
+src/components/Reception/._search.tsx
+src/components/Footer/._Hero.tsx

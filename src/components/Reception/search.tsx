@@ -124,7 +124,7 @@ let count:AuthState
   const querySnapshot = await getDocs(collection(db, "patients"));
   querySnapshot.forEach((doc) => {
     // doc.data() is never undefined for query doc snapshots
-    // console.log(doc.id, " => ",  (doc.data().DOB).toDate());
+    console.log(doc.id, " => ",  (doc.data().DOB).valueOf());
     let user:RowData = {
       email: doc.data().email,
       id:doc.data().id,
@@ -132,7 +132,7 @@ let count:AuthState
       secondName:doc.data().secondName,
       surname:doc.data().surname,
       maritalStatus:doc.data().maritalStatus,
-      DOB:`${new Date(doc.data().DOB.seconds).toDateString()}`,
+      DOB:`${(doc.data().DOB).toDate()}`,
       tribe:doc.data().tribe,
       religion:doc.data().religion,
       phoneNumber: doc.data().phoneNumber,

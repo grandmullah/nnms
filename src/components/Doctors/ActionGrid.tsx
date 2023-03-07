@@ -10,6 +10,7 @@ import {
   IconReport,
   IconCashBanknote,
   IconCoin,
+  IconPrescription 
 } from '@tabler/icons';
 import { BioData, getUsers } from '@/app/features/triageSlice';
 import { AppDispatch, RootState } from '@/app/store';
@@ -23,6 +24,7 @@ import { SocialHistory } from '../Triage/SocialHistory';
 import { MedicalHistory } from '../Triage/MedicalHistory';
 import { Medication } from '../Triage/Medication';
 import { Review } from '../Triage/Reviews';
+import { Prescription } from './prescripe';
 import { useRouter } from 'next/router';
 
 const mockdata = [
@@ -122,7 +124,7 @@ export function ActionsGridPatients() {
           {active === 'Medications' &&  <Medication/> }
           {active === 'Medical history' &&  <MedicalHistory/> }
           {active === 'Social History' &&  <SocialHistory/> }
-          {active === 'Reviews' &&  <Review/> }
+          {active === 'Reviews' &&  <Prescription {...data}/> }
           {active === 'Allergies' &&  <Allergies {...data}/> }
           {active === 'Family History' &&  <FAmilyHistory/> }
           

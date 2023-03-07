@@ -10,8 +10,8 @@ import {
     ActionIcon,
     rem,
   } from '@mantine/core';
-  import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
-  import { ContactIconsList } from './Details';
+import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
+import { ContactIconsList } from './Details';
 import { NumberInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDispatch, useSelector } from 'react-redux';

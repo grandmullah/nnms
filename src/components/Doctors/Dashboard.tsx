@@ -8,6 +8,7 @@ import {
   Text,
   Center,
   TextInput,
+  Badge,
 } from '@mantine/core';
 import { keys } from '@mantine/utils';
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons';
@@ -173,7 +174,8 @@ export function Dashboard() {
       <td>{row.name}</td>
       <td>{row.email}</td>
       <td>{row.DOB}</td>
-      <td onClick={()=> router.push(`/hospital/doctor/${row.id}`)}> proceed </td>
+      <td onClick={()=> router.push(`/hospital/doctor/${row.id}`)}>
+      <Badge variant="gradient" gradient={{ from: 'teal', to: 'lime', deg: 105 }}>proceed</Badge> </td>
     </tr>
   ));
 

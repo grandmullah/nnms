@@ -14,6 +14,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown } from '@tabler/icons';
 import { MantineLogo } from '@mantine/ds';
 import { FooterLinks } from '@/components/Footer/Index';
+import { HeroImageBackground } from '@/components/Footer/Hero';
 
 export const MOCKDATA = [
   {
@@ -211,7 +212,7 @@ export default  function FeaturesGrid({ title, description, data = MOCKDATA }: F
 
   return (
     <>
-    <HeaderMenuColored   links={[]}  />
+    <HeroImageBackground />
    
     <Container className={classes.wrapper}>
 
@@ -255,7 +256,9 @@ export default  function FeaturesGrid({ title, description, data = MOCKDATA }: F
 
     if (menuItems) {
       return (
-        <Menu  key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
+
+        <div>
+        <Menu   key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
           <Menu.Target>
             <a
               href={link.link}
@@ -270,6 +273,8 @@ export default  function FeaturesGrid({ title, description, data = MOCKDATA }: F
           </Menu.Target>
           <Menu.Dropdown>{menuItems}</Menu.Dropdown>
         </Menu>
+        </div>
+        
       );
     }
 
@@ -286,7 +291,7 @@ export default  function FeaturesGrid({ title, description, data = MOCKDATA }: F
   });
 
   return (
-    <Header height={56} className={classes.header} mb={120}>
+    <Header style={{marginTop:'10px'}} height={56} className={classes.header} mb={120}>
       <Container>
         <div className={classes.inner}>
           <Text>NNMS</Text>

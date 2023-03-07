@@ -12,7 +12,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useSelector, } from 'react-redux' 
 import { RootState } from '@/app/store';
 import dayjs from 'dayjs';
-import { IconCalendar, IconCheck } from '@tabler/icons';
+import { IconCalendar, IconCheck, IconX } from '@tabler/icons';
 
 interface clProps{
   closing:(value:boolean) =>void
@@ -54,30 +54,56 @@ function Demo({closing}:clProps) {
   const count = useSelector((state:RootState) =>state.Auth )
 
   const regis = async  (values: { email: string; id: string; firstName: string; secondName: string; surname: string;  maritalStatus: string; DOB: string; tribe: string; religion: string; phoneNumber: string; nationality: string; county: string; occupation: string; address: string; kinName: string; kinRelationship: string; kinPhoneNumber: string; kinEmail: string; kinOccupation: string; kinAddress: string; }) => {
-    notifications.show({
-      id: 'load-data',
-      loading: true,
-      title: 'Loading your data',
-      message: 'saving to database',
-      autoClose: false,
-      withCloseButton: false,
-    });
-   
-    console.log(count)
-   
     console.log(values)
-   await setDoc(doc(db, "patients", values.id), {...values, access:[count.hospital], registered:Date.now(),});
+    try {
+      notifications.show({
+        id: 'load-data',
+        loading: true,
+        title: 'Loading your data',
+        message: 'saving to database',
+        autoClose: false,
+        withCloseButton: false,
+      });
+     
+      console.log(count)
+     
+      console.log(values)
+     await setDoc(doc(db, "patients", values.id), {...values, access:[count.hospital], registered:Date.now(),});
+     
+      closing(false)
+      notifications.update({
+        id: 'load-data',
+        color: 'teal',
+        title: 'Data was loaded',
+        message: 'Data saved successfullty',
+        icon: <IconCheck size="1rem" />,
+        autoClose: 2000,
+      });
+    } catch (error) {
+      
+      notifications.update({
+        id: 'load-data',
+        title: 'Error notification',
+        message: 'Hey there, something went  wrong! 🤥',
+        icon: <IconX size="1rem"  color="red"/>,
+        styles: (theme) => ({
+          root: {
+            backgroundColor: theme.colors.red,
+            borderColor: theme.colors.blue[6],
+
+            '&::before': { backgroundColor: theme.white },
+          },
+
+          title: { color: theme.white },
+          description: { color: theme.white },
+          closeButton: {
+            color: theme.white,
+            '&:hover': { backgroundColor: theme.colors.blue[7] },
+          },
+        }),
+      })
+   }}
    
-    closing(false)
-    notifications.update({
-      id: 'load-data',
-      color: 'teal',
-      title: 'Data was loaded',
-      message: 'NData saved successfullty',
-      icon: <IconCheck size="1rem" />,
-      autoClose: 2000,
-    });
-  }
   const form = useForm({
     initialValues: {
       email: '',
@@ -126,7 +152,7 @@ function Demo({closing}:clProps) {
 
   return (
     <Box>
-      <form onSubmit={form.onSubmit((values) => regis(values))}>
+      <form onSubmit={form.onSubmit((values) => {console.log(values); regis(values)})}>
         <Group mb="md" mt="md" >
         <TextInput
           withAsterisk
