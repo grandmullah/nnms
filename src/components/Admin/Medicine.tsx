@@ -10,10 +10,17 @@ import {
     useMantineTheme,
     Button,
   } from '@mantine/core';
-  import { IconPencil, IconTrash } from '@tabler/icons';
-  
+  import { IconPencil, IconPill, IconTrash } from '@tabler/icons';
+import { Receive } from './receive';
+import { AddMedicine } from './addMedicine';
+type Medicine = {
+  name: string;
+  presentation: string;
+  price: string;
+  amount:number
+};
   interface UsersTableProps {
-    data: { avatar: string; name: string; job: string; email: string; phone: string }[];
+    data:  Record<string, Medicine>
     activate:(value:string) =>void
   }
   
@@ -25,11 +32,11 @@ import {
   
   export function Medicine({ data,activate }: UsersTableProps) {
     const theme = useMantineTheme();
-    const rows = data.map((item) => (
-      <tr key={item.name}>
+    const rows = Object.entries(data).map(([key, item]) => (
+      <tr key={key}>
         <td>
           <Group spacing="sm">
-            <Avatar size={30} src={item.avatar} radius={30} />
+          <ActionIcon variant="transparent"><IconPill /></ActionIcon>
             <Text size="sm" weight={500}>
               {item.name}
             </Text>
@@ -38,30 +45,31 @@ import {
   
         <td>
           <Badge
-            color={jobColors[item.job.toLowerCase()]}
+            // color={jobColors[item.job.toLowerCase()]}
             variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
           >
-            {item.job}
+            {item.presentation}
           </Badge>
         </td>
         <td>
-          <Anchor<'a'> size="sm" href="#" onClick={(event) => event.preventDefault()}>
-            {item.email}
-          </Anchor>
+        <Badge
+            // color={jobColors[item.job.toLowerCase()]}
+            variant={theme.colorScheme === 'dark' ? 'light' : 'outline'}
+          >
+            {item.price}
+          </Badge>
         </td>
         <td>
           <Text size="sm" color="dimmed">
-            {item.phone}
+            {item.amount}
           </Text>
         </td>
         <td>
           <Group spacing={0} position="right">
-            <ActionIcon>
-              <IconPencil size={16} stroke={1.5} />
-            </ActionIcon>
-            <ActionIcon color="red">
+            <Receive medicine={item.name}/>
+            {/* <ActionIcon color="red">
               <IconTrash size={16} stroke={1.5} />
-            </ActionIcon>
+            </ActionIcon> */}
           </Group>
         </td>
       </tr>
@@ -73,17 +81,17 @@ import {
                 <Table  verticalSpacing="sm">
                     <thead>
                     <tr>
-                        <th>Employee</th>
-                        <th>Job title</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th />
+                        <th>name</th>
+                        <th>presentation</th>
+                        <th>price</th>
+                        <th>stock</th>
+                        <th> Action</th>
                     </tr>
                     </thead>
                     <tbody>{rows}</tbody>
                     <tr>
                         <td style={{textAlign:'right'}} colSpan={5} >
-                        <Button  onClick={() => activate('Order')} variant="gradient" gradient={{ from: 'teal', to: 'blue', deg: 60 }}>make request</Button>
+                           <AddMedicine />
                         </td>
                     </tr>
                 </Table>

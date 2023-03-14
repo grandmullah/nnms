@@ -16,15 +16,16 @@ import {
   }
   
   const jobColors: Record<string, string> = {
-    engineer: 'blue',
-    manager: 'cyan',
-    designer: 'pink',
+    reception: 'blue',
+    doctor: 'cyan',
+    admin: 'pink',
   };
   
   export function EmployeeTable({ data }: UsersTableProps) {
+    console.log(data)
     const theme = useMantineTheme();
     const rows = data.map((item) => (
-      <tr key={item.name}>
+      <tr key={item.email}>
         <td>
           <Group spacing="sm">
             <Avatar size={30} src={item.avatar} radius={30} />

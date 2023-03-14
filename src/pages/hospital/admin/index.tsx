@@ -1,36 +1,74 @@
-import { useState } from 'react';
-import { EmployeeTable,  } from '../../../components/Admin/employees';
-import { Navbar, Center, Tooltip, UnstyledButton, createStyles, Stack, Grid,rem } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { createStyles, Navbar, Group, Code, getStylesRef, rem, Grid } from '@mantine/core';
 import {
-  TablerIcon,
-  IconHome2,
-  IconGauge,
-  IconDeviceDesktopAnalytics,
+  IconBellRinging,
   IconFingerprint,
-  IconCalendarStats,
-  IconUser,
+  IconKey,
   IconSettings,
-  IconLogout,
+  Icon2fa,
+  IconDatabaseImport,
+  IconReceipt2,
   IconSwitchHorizontal,
-} from '@tabler/icons';
+  IconLogout,
+} from '@tabler/icons-react';
 import { MantineLogo } from '@mantine/ds';
+import useSWR, { SWRConfig } from 'swr'
+import axios from 'axios'
+import { EmployeeTable,  } from '../../../components/Admin/employees';
 import { Medicine } from '@/components/Admin/Medicine';
 import { OrderPharmaceuticals } from '@/components/Admin/AddOrder';
+import {app} from '../../../firebase'
+import { getAuth, signOut } from "firebase/auth";
+import { useRouter } from 'next/router';
+import { RootState } from '@/app/store';
+import { useSelector } from 'react-redux';
+const auth = getAuth(app);
 
 
 const useStyles = createStyles((theme) => ({
+  navbar: {
+    backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
+  },
+
+  version: {
+    backgroundColor: theme.fn.lighten(
+      theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
+      0.1
+    ),
+    color: theme.white,
+    fontWeight: 700,
+  },
+
+  header: {
+    paddingBottom: theme.spacing.md,
+    marginBottom: `calc(${theme.spacing.md} * 1.5)`,
+    borderBottom: `${rem(1)} solid ${theme.fn.lighten(
+      theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
+      0.1
+    )}`,
+  },
+
+  footer: {
+    paddingTop: theme.spacing.md,
+    marginTop: theme.spacing.md,
+    borderTop: `${rem(1)} solid ${theme.fn.lighten(
+      theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
+      0.1
+    )}`,
+  },
+
   link: {
-    width: rem(50),
-    height: rem(50),
-    borderRadius: theme.radius.md,
+    ...theme.fn.focusStyles(),
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    textDecoration: 'none',
+    fontSize: theme.fontSizes.sm,
     color: theme.white,
-    opacity: 0.85,
+    padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
+    borderRadius: theme.radius.sm,
+    fontWeight: 500,
 
     '&:hover': {
-      opacity: 1,
       backgroundColor: theme.fn.lighten(
         theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
         0.1
@@ -38,139 +76,125 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
-  active: {
-    opacity: 1,
+  linkIcon: {
+    ref: getStylesRef('icon'),
+    color: theme.white,
+    opacity: 0.75,
+    marginRight: theme.spacing.sm,
+  },
+
+  linkActive: {
     '&, &:hover': {
       backgroundColor: theme.fn.lighten(
         theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
         0.15
       ),
+      [`& .${getStylesRef('icon')}`]: {
+        opacity: 0.9,
+      },
     },
   },
 }));
 
-interface NavbarLinkProps {
-  icon: TablerIcon;
-  label: string;
-  active?: boolean;
-  onClick?(): void;
-}
-function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
-  const { classes, cx } = useStyles();
-  return (
-    <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
-      <UnstyledButton onClick={onClick} className={cx(classes.link, { [classes.active]: active })}>
-        <Icon size="1.2rem" stroke={1.5} />
-      </UnstyledButton>
-    </Tooltip>
-  );
-}
-
-const mockdata = [
-  { icon: IconHome2, label: 'Dashboard' },
-  { icon: IconGauge, label: 'Pharmaceutical' },
-  { icon: IconDeviceDesktopAnalytics, label: 'Analytics' },
-  { icon: IconCalendarStats, label: 'Releases' },
-  { icon: IconUser, label: 'Account' },
-  { icon: IconFingerprint, label: 'Security' },
-  { icon: IconSettings, label: 'Settings' },
+const dat = [
+  { link: '', label: 'Dashboard', icon: IconReceipt2 },
+  { link: '', label: 'Notifications', icon: IconBellRinging },
+  
+  { link: '', label: 'Security', icon: IconFingerprint },
+  { link: '', label: 'SSH Keys', icon: IconKey },
+  { link: '', label: 'Pharmaceutical', icon: IconDatabaseImport },
+  { link: '', label: 'Authentication', icon: Icon2fa },
+  { link: '', label: 'Other Settings', icon: IconSettings },
 ];
 
-
-    const data = [
-      {
-        "avatar": "https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-        "name": "Robert Wolfkisser",
-        "job": "Engineer",
-        "email": "rob_wolf@gmail.com",
-        "phone": "+44 (452) 886 09 12"
-      },
-      {
-        "avatar": "https://images.unsplash.com/photo-1586297135537-94bc9ba060aa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-        "name": "Jill Jailbreaker",
-        "job": "Engineer",
-        "email": "jj@breaker.com",
-        "phone": "+44 (934) 777 12 76"
-      },
-      {
-        "avatar": "https://images.unsplash.com/photo-1632922267756-9b71242b1592?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-        "name": "Henry Silkeater",
-        "job": "Designer",
-        "email": "henry@silkeater.io",
-        "phone": "+44 (901) 384 88 34"
-      },
-      {
-        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-        "name": "Bill Horsefighter",
-        "job": "Designer",
-        "email": "bhorsefighter@gmail.com",
-        "phone": "+44 (667) 341 45 22"
-      },
-      {
-        "avatar": "https://images.unsplash.com/photo-1630841539293-bd20634c5d72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-        "name": "Jeremy Footviewer",
-        "job": "Manager",
-        "email": "jeremy@foot.dev",
-        "phone": "+44 (881) 245 65 65"
-      }
-    ]
-  
-export default function NavbarMinimalColored() {
+export default function NavbarSimpleColored() {
+  const {hospital} =  useSelector((state:RootState) =>state.Auth )
+  const fetcher = (url: string) => axios.get(url).then(res => res.data)
+  const { data, error } = useSWR('/api/employee', fetcher, { refreshInterval: 1000 })
+  const  med =  useSWR(() => '/api/medicine?hospital=' + hospital,fetcher, { refreshInterval: 1000 })
+  const [empl, setEmpl] = useState([{avatar: '', name: '', job: '', email: '', phone: ''}])
+  const [medicine , setMedicine] = useState({amoxyl: { name: 'amoxyl', presentation: 'tablets', price: '12',amount:0 }})
+  const { classes, cx } = useStyles();
   const [active, setActive] = useState('Dashboard');
+  // console.log(empl,error,med.data.data)
+  const router = useRouter()
 
   const activate = (value:string) => {
     setActive(value)
  }
+ useEffect(()=>{
+  if(data){
+    setEmpl(data.jj)
+    
+  }
+  if(med){
+    console.log(med?.data?.data)
+    setMedicine(med?.data?.data)
+  }
+    
+ },[data,med])
 
-  const links = mockdata.map((link, index) => (
-    <NavbarLink
-      {...link}
-      key={link.label}
-      active={link.label === active}
-      onClick={() => setActive(link.label)}
-    />
+  const links = dat.map((item) => (
+    <a
+      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
+      href={item.link}
+      key={item.label}
+      onClick={(event) => {
+        event.preventDefault();
+        setActive(item.label);
+      }}
+    >
+      <item.icon className={classes.linkIcon} stroke={1.5} />
+      <span>{item.label}</span>
+    </a>
   ));
 
   return (
     <Grid>
-        <Grid.Col span={1}>
-        <Navbar
-            
-            width={{ base: 80 }}
-            p="md"
-            sx={(theme) => ({
-                backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
-                .background,
-            })}
-            >
-            <Center>
-                <MantineLogo type="mark" inverted size={30} />
-            </Center>
-            <Navbar.Section grow mt={50}>
-                <Stack justify="center" spacing={0}>
-                {links}
-                </Stack>
-            </Navbar.Section>
-            <Navbar.Section>
-                <Stack justify="center" spacing={0}>
-                <NavbarLink icon={IconSwitchHorizontal} label="Change account" />
-                <NavbarLink icon={IconLogout} label="Logout" />
-                </Stack>
-            </Navbar.Section>  
-        </Navbar>   
-        </Grid.Col>
-        <Grid.Col span={9}>
+      <Grid.Col span={2}>
+        <Navbar  p="md" className={classes.navbar}>
+
+
+        <Navbar.Section grow>
+          {/* <Group className={classes.header} position="apart">
+            <MantineLogo size={28} inverted />
+            <Code className={classes.version}>v3.1.2</Code>
+          </Group> */}
+          {links}
+        </Navbar.Section>
+        <Navbar.Section className={classes.footer}>
+          <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+            <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
+            <span>Change account</span>
+          </a>
+
+          <a href="#" className={classes.link} onClick={() => {signOut(auth).then(() => {
+                router.push('/')
+              }).catch((error) => {
+                // An error happened.
+              });}}>
+            <IconLogout className={classes.linkIcon} stroke={1.5} />
+            <span>Logout</span>
+          </a>
+        </Navbar.Section>
+      </Navbar>
+
+    </Grid.Col>
+    <Grid.Col span={10}>
                   
         <div  style={{height:'50px', marginTop: '20px', marginBottom: '10px',}}></div>
         <div>
-        {active === 'Dashboard' &&  <EmployeeTable data={data} />}
-        {active === 'Pharmaceutical' &&  <Medicine data={data} activate={activate} />}
-        {active === 'Order' &&  <OrderPharmaceuticals/>}
+        {active === 'Dashboard' &&  <EmployeeTable data={empl} />}
+        {active === 'Pharmaceutical' &&  <Medicine data={medicine} activate={activate} />}
+        {/* {active === 'Order' &&  <OrderPharmaceuticals/>} */}
         </div>
            
         </Grid.Col>
-        
+
+
     </Grid>
-    
+   
   );
 }
+
+

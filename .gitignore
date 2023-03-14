@@ -63,3 +63,11 @@ src/components/Triage/._Medication.tsx
 src/components/Triage/._SocialHistory.tsx
 src/components/Triage/._FamilyHistory.tsx
 src/components/Triage/._Complains.tsx
+src/pages/api/._firebase.ts
+src/pages/api/._employee.ts
+src/pages/api/._collins2-cd213-firebase-adminsdk-y50vm-62e28d6bea.json
+src/components/Admin/._employees.tsx
+src/components/Admin/._Medicine.tsx
+src/components/Admin/._receive.tsx
+src/components/Admin/._AddOrder.tsx
+src/components/Admin/._addMedicine.tsx
