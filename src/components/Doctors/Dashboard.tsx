@@ -123,7 +123,7 @@ const fetchPatients = async () => {
          let user:RowData = {
             name: doc.data().firstName,
             email: doc.data().email,
-            DOB: `${(new Date(`${(doc.data().DOB).toDate()}`).getFullYear())  - new Date().getFullYear()}` ,
+            DOB: `${(new Date(`${new Date().getFullYear() -(doc.data().DOB).toDate()}`).getFullYear()) }` ,
             id:doc.data().id
          }
          dat.push(user)
