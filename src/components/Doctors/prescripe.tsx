@@ -21,7 +21,7 @@ export function Prescription({user,}:BioData) {
 
   return (
     <>
-      <Modal opened={opened} onClose={close} title="precription" centered>
+      <Modal  size='xl'  opened={opened} onClose={close} title="precription" centered>
         <Group spacing="xl" grow > 
             <Select 
             label="Action"

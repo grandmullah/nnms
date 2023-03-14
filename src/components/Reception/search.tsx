@@ -132,7 +132,7 @@ let count:AuthState
       secondName:doc.data().secondName,
       surname:doc.data().surname,
       maritalStatus:doc.data().maritalStatus,
-      DOB:`${(doc.data().DOB).toDate()}`,
+      DOB:new Date(`${(doc.data().DOB).toDate()}`).toLocaleDateString(),
       tribe:doc.data().tribe,
       religion:doc.data().religion,
       phoneNumber: doc.data().phoneNumber,
