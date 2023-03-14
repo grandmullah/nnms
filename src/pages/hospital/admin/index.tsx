@@ -97,11 +97,11 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const dat = [
-  { link: '', label: 'Dashboard', icon: IconReceipt2 },
+  { link: '', label: 'Employees', icon: IconReceipt2 },
   { link: '', label: 'Notifications', icon: IconBellRinging },
   
-  { link: '', label: 'Security', icon: IconFingerprint },
-  { link: '', label: 'SSH Keys', icon: IconKey },
+  // { link: '', label: 'Security', icon: IconFingerprint },
+  // { link: '', label: 'SSH Keys', icon: IconKey },
   { link: '', label: 'Pharmaceutical', icon: IconDatabaseImport },
   { link: '', label: 'Authentication', icon: Icon2fa },
   { link: '', label: 'Other Settings', icon: IconSettings },
@@ -115,7 +115,7 @@ export default function NavbarSimpleColored() {
   const [empl, setEmpl] = useState([{avatar: '', name: '', job: '', email: '', phone: ''}])
   const [medicine , setMedicine] = useState({amoxyl: { name: 'amoxyl', presentation: 'tablets', price: '12',amount:0 }})
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState('Dashboard');
+  const [active, setActive] = useState('Employees');
   // console.log(empl,error,med.data.data)
   const router = useRouter()
 
@@ -184,7 +184,7 @@ export default function NavbarSimpleColored() {
                   
         <div  style={{height:'50px', marginTop: '20px', marginBottom: '10px',}}></div>
         <div>
-        {active === 'Dashboard' &&  <EmployeeTable data={empl} />}
+        {active === 'Employees' &&  <EmployeeTable data={empl} />}
         {active === 'Pharmaceutical' &&  <Medicine data={medicine} activate={activate} />}
         {/* {active === 'Order' &&  <OrderPharmaceuticals/>} */}
         </div>

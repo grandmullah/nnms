@@ -29,25 +29,16 @@ export function OrderPharmaceuticals({medicine,closing}:propss) {
             withCloseButton: false,
         });
         const postRef = ref(database,);
-        const Oref = ref(database,)
+        const Oref = ref(database,`medicine/${hospital}/${medicine}`)
         const updates:any = {};
         updates[`medicine/${hospital}/${medicine}/amount`] = increment(parseFloat(form.values.amount));
         // updates[`medicine/${hospital}/${medicine}/amount`] = increment(parseFloat(form.values.amount));
-        runTransaction(postRef, (post) => {
-          if (post) {
-            if (post.stars && post.stars[uid]) {
-              post.starCount--;
-              post.stars[uid] = null;
-            } else {
-              post.starCount++;
-              if (!post.stars) {
-                post.stars = {};
-              }
-              post.stars[uid] = true;
-            }
-          }
-          return post;
-        });
+        // runTransaction(Oref, (post) => {
+        //   if (post) {
+        //    console.log(post)
+        //   }
+        //   return post;
+        // });
         update(postRef, updates);
         closing()
         notifications.update({
