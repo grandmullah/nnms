@@ -28,15 +28,19 @@ export function Prescription({user,}:BioData) {
             placeholder="Pick one"value={value} onChange={setValue} 
             data={[
                  { value: 'Admit', label: 'Admit ' },
-                 { value: 'medicate ', label: 'provide Medication and discharge ' }
+                 { value: 'medicate', label: 'provide Medication and discharge ' }
             ]} />
                
         </Group>
+        <Space h="xl" />
+        <Space h="xl" />
         <Space h="xl" />
      
         <div style={{ marginTop: '40px', marginBottom: '10px', marginRight: '20px'}} >
           
           {value === 'Admit' &&  <Admit user={user}  closing={closing} /> }
+          {value === 'medicate' &&  <PrescriptionDetails /> }
+
           
           
         </div>
@@ -108,3 +112,51 @@ function Admit({closing,user}:clProps) {
       </Group>
     );
   }
+
+  interface PrescriptionDetailsProps {
+    // Add any props that you need here
+  }
+  
+  const PrescriptionDetails: React.FC<PrescriptionDetailsProps> = () => {
+    const [medicationName, setMedicationName] = useState('');
+    const [dosage, setDosage] = useState('');
+    const [frequency, setFrequency] = useState('');
+    const [duration, setDuration] = useState('');
+  
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      // Handle prescription submission logic
+    };
+  
+    return (
+      <Group>
+        <div style={{ padding: '20px', backgroundColor: '#fff' }}>
+        <h1 style={{ marginBottom: '20px', fontSize: '28px', fontWeight: 'bold' }}>Prescription Details</h1>
+        <form onSubmit={handleSubmit}>
+          <label style={{ display: 'block', marginBottom: '10px' }}>
+            Medication Name:
+            <TextInput style={{ marginLeft: '10px' }} type="text" value={medicationName} onChange={(e) => setMedicationName(e.target.value)} />
+          </label>
+          <br />
+          <label style={{ display: 'block', marginBottom: '10px' }}>
+            Dosage:
+            <TextInput style={{ marginLeft: '10px' }} type="text" value={dosage} onChange={(e) => setDosage(e.target.value)} />
+          </label>
+          <br />
+          <label style={{ display: 'block', marginBottom: '10px' }}>
+            Frequency:
+            <TextInput style={{ marginLeft: '10px' }} type="text" value={frequency} onChange={(e) => setFrequency(e.target.value)} />
+          </label>
+          <br />
+          <label style={{ display: 'block', marginBottom: '10px' }}>
+            Duration:
+            <TextInput style={{ marginLeft: '10px' }} type="text" value={duration} onChange={(e) => setDuration(e.target.value)} />
+          </label>
+          <br />
+          <Button type="submit">Submit</Button>
+        </form>
+      </div>
+      </Group>
+      
+    );
+  };

@@ -118,7 +118,8 @@ const fetchPatients = async () => {
     const querySnapshot = await getDocs(collection(db, "patients"));
     querySnapshot.forEach(async (doc) => {
       // doc.data() is never undefined for query doc snapshots
-      if (await doc.data().state &&  doc.data().state.active && doc.data().state.hospital === count.hospital){
+      //&& doc.data().state.hospital === count.hospital
+      if (await doc.data().state &&  doc.data().state.active ){
          console.log(doc.data())
          let user:RowData = {
             name: doc.data().firstName,
@@ -191,7 +192,7 @@ export function Dashboard() {
       <Table
         horizontalSpacing="md"
         verticalSpacing="xs"
-        sx={{ tableLayout: 'fixed', minWidth: 700 }}
+        
       >
         <thead>
           <tr>

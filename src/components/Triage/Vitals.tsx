@@ -10,15 +10,16 @@ import {
     ActionIcon,
     rem,
   } from '@mantine/core';
-import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
+import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram, IconCheck } from '@tabler/icons';
 import { ContactIconsList } from './Details';
 import { NumberInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDispatch, useSelector } from 'react-redux';
 import vitals, { updateVitals } from '../../app/features/vitals';
 import { AppDispatch, RootState } from '@/app/store';
-import { BioData } from '@/app/features/triageSlice';
+import { BioData, getUsers } from '@/app/features/triageSlice';
 import { VitalN } from './note';
+import { notifications } from '@mantine/notifications';
   
   const useStyles = createStyles((theme) => ({
     wrapper: {
@@ -114,7 +115,30 @@ import { VitalN } from './note';
           </div>
           <div className={classes.form}>
           <Group grow>
-              <form onSubmit={form.onSubmit((values: any) => dispatch(updateVitals({...values,hospital:hospital,uid:user.bio.id,timestamp:Date.now()})))}>
+              <form onSubmit={form.onSubmit((values: any) => {
+                 notifications.show({
+                  id: 'load-data',
+                  loading: true,
+                  title: 'Loading your data',
+                  message: 'Data will be loaded in 3 seconds, you cannot close this yet',
+                  autoClose: false,
+                  withCloseButton: false,
+                });
+                dispatch(updateVitals({...values,hospital:hospital,uid:user.bio.id,timestamp:Date.now()}))
+                setTimeout(() => {
+                  notifications.update({
+                    id: 'load-data',
+                    color: 'teal',
+                    title: 'Data was loaded',
+                    message: 'Notification will close in 2 seconds, you can close this notification now',
+                    icon: <IconCheck size="1rem" />,
+                    autoClose: 2000,
+                  });
+                  
+                }, 3000);
+               dispatch(getUsers(user.bio.id))
+              }
+                )}>
                 <Group grow  >
                   <Text >Body Weight: </Text>
                   <NumberInput

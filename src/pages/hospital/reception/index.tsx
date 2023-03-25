@@ -18,6 +18,7 @@ import Search from '../../../components/Reception/search'
 import { getAuth, signOut } from "firebase/auth";
 import {app} from '../../../firebase'
 import { RootState } from '@/app/store';
+import NotificationPage from '../../../components/Reception/Notification';
 const auth = getAuth(app);
 
 
@@ -162,6 +163,7 @@ export default function NavbarSimpleColored() {
         
         <div style={{ marginTop: '20px', marginBottom: '10px', marginRight: '20px'}}>
         {active === 'Dashboard' &&  < Search />}
+        {active === 'Notifications' &&  < NotificationPage />} 
         </div>
           
        

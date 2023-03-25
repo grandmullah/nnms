@@ -1,123 +1,186 @@
 import { useState } from 'react';
-import { Grid,Group, Box, Collapse, ThemeIcon, Text, UnstyledButton, createStyles } from '@mantine/core';
-import { TablerIcon, IconCalendarStats, IconChevronLeft, IconChevronRight } from '@tabler/icons';
+import { createStyles, Navbar, Group, Code, Grid, Text, getStylesRef,rem } from '@mantine/core';
+import {
+  IconBellRinging,
+  IconFingerprint,
+  IconKey,
+  IconSettings,
+  Icon2fa,
+  IconDatabaseImport,
+  IconReceipt2,
+  IconSwitchHorizontal,
+  IconLogout,
+} from '@tabler/icons';
+import { MantineLogo } from '@mantine/ds';
+import { getAuth, signOut } from "firebase/auth";
+import {app} from '../../../firebase'
+const auth = getAuth(app);
+import { Dashboard } from '@/components/Lab/Dashboard';
+import { LabRequests } from '@/components/Lab/labreport';
+
+
+import { useRouter } from 'next/navigation';
+import { PharmacyPage } from '@/components/pharmacy/dispense';
+import AccountSettings from '../../../components/Lab/account';
+
+
+
+
+
 
 const useStyles = createStyles((theme) => ({
-  control: {
-    fontWeight: 500,
-    display: 'block',
-    width: '100%',
-    padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
-    fontSize: theme.fontSizes.sm,
+  navbar: {
+    backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
+  },
 
-    '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
-      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-    },
+  version: {
+    backgroundColor: theme.fn.lighten(
+      theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
+      0.1
+    ),
+    color: theme.white,
+    fontWeight: 700,
+  },
+
+  header: {
+    paddingBottom: theme.spacing.md,
+    marginBottom: `calc(${theme.spacing.md} * 1.5)`,
+    borderBottom: `${rem(1)} solid ${theme.fn.lighten(
+      theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
+      0.1
+    )}`,
+  },
+
+  footer: {
+    paddingTop: theme.spacing.md,
+    marginTop: theme.spacing.md,
+    borderTop: `${rem(1)} solid ${theme.fn.lighten(
+      theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
+      0.1
+    )}`,
   },
 
   link: {
-    fontWeight: 500,
-    display: 'block',
+    ...theme.fn.focusStyles(),
+    display: 'flex',
+    alignItems: 'center',
     textDecoration: 'none',
-    padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
-    paddingLeft: 31,
-    marginLeft: 30,
     fontSize: theme.fontSizes.sm,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
-    borderLeft: `1px solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
-    }`,
+    color: theme.white,
+    padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
+    borderRadius: theme.radius.sm,
+    fontWeight: 500,
 
     '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0],
-      color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+      backgroundColor: theme.fn.lighten(
+        theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
+        0.1
+      ),
     },
   },
 
-  chevron: {
-    transition: 'transform 200ms ease',
+  linkIcon: {
+    ref: getStylesRef('icon'),
+    color: theme.white,
+    opacity: 0.75,
+    marginRight: theme.spacing.sm,
+  },
+
+  linkActive: {
+    '&, &:hover': {
+      backgroundColor: theme.fn.lighten(
+        theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background!,
+        0.15
+      ),
+      [`& .${getStylesRef('icon')}`]: {
+        opacity: 0.9,
+      },
+    },
   },
 }));
 
-interface LinksGroupProps {
-  icon: TablerIcon;
-  label: string;
-  initiallyOpened?: boolean;
-  links?: { label: string; link: string }[];
-}
+const data = [
+ 
+  { link: '', label: 'Dashboard', icon: IconReceipt2 },
+  { link: '', label: 'Notifications', icon: IconBellRinging },
+  { link: '', label: 'Lab Reports', icon: IconDatabaseImport },
 
-export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksGroupProps) {
-  const { classes, theme } = useStyles();
-  const hasLinks = Array.isArray(links);
-  const [opened, setOpened] = useState(initiallyOpened || false);
-  const ChevronIcon = theme.dir === 'ltr' ? IconChevronRight : IconChevronLeft;
-  const items = (hasLinks ? links : []).map((link) => (
-    <Text<'a'>
-      component="a"
-      className={classes.link}
-      href={link.link}
-      key={link.label}
-      onClick={(event) => event.preventDefault()}
+  { link: '', label: 'Security', icon: IconFingerprint },
+  // { link: '', label: 'SSH Keys', icon: IconKey },
+  // { link: '', label: 'Databases', icon: IconDatabaseImport },
+  // { link: '', label: 'Authentication', icon: Icon2fa },
+  { link: '', label: 'Other Settings', icon: IconSettings },
+];
+
+export default function NavbarSimpleColored() {
+  const router = useRouter();
+  const { classes, cx } = useStyles();
+  const [active, setActive] = useState('Dashboard');
+
+  const links = data.map((item) => (
+    <a
+      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
+      href={item.link}
+      key={item.label}
+      onClick={(event) => {
+        event.preventDefault();
+        setActive(item.label);
+      }}
     >
-      {link.label}
-    </Text>
+      <item.icon className={classes.linkIcon} stroke={1.5} />
+      <span>{item.label}</span>
+    </a>
   ));
 
   return (
-    <>
-      <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control}>
-        <Group position="apart" spacing={0}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <ThemeIcon variant="light" size={30}>
-              <Icon size={18} />
-            </ThemeIcon>
-            <Box ml="md">{label}</Box>
-          </Box>
-          {hasLinks && (
-            <ChevronIcon
-              className={classes.chevron}
-              size={14}
-              stroke={1.5}
-              style={{
-                transform: opened ? `rotate(${theme.dir === 'rtl' ? -90 : 90}deg)` : 'none',
-              }}
-            />
-          )}
-        </Group>
-      </UnstyledButton>
-      {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
-    </>
-  );
-}
-
-const mockdata = {
-  label: 'Releases',
-  icon: IconCalendarStats,
-  links: [
-    { label: 'Upcoming releases', link: '/' },
-    { label: 'Previous releases', link: '/' },
-    { label: 'Releases schedule', link: '/' },
-  ],
-};
-
-export default function NavbarLinksGroup() {
-  return (
     <Grid>
-        <Grid.Col span={3}>
-            <Box
-                sx={(theme) => ({
-                    
-                    // padding: theme.spacing.md,
-                    backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
-                    .background,
-                })}
-                >
-                <LinksGroup {...mockdata} />
-            </Box>
-        </Grid.Col>
-    </Grid>
+      <Grid.Col span={3}>
+        <Navbar  p="md" className={classes.navbar}>
+          <Navbar.Section grow>
+            <Group className={classes.header} position="apart">
+              
+              <Text style={{color:'white'}}>NNMS</Text>
+              <Code className={classes.version}>v1.0.0</Code>
+            </Group>
+            {links}
+          </Navbar.Section>
 
+          <Navbar.Section className={classes.footer}>
+            <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+              <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
+              <span>Change account</span>
+            </a>
+
+            <a href="#" className={classes.link} onClick={(event) => {signOut(auth).then(() => {
+                router.push('/')
+              }).catch((error) => {
+                // An error happened.
+              });}}>
+              <IconLogout className={classes.linkIcon} stroke={1.5} />
+              <span>Logout</span>
+            </a>
+          </Navbar.Section>
+        </Navbar>
+      </Grid.Col>
+      <Grid.Col span={9}>
+      
+        <div className={classes.navbar}  style={{height:'50px', marginTop: '20px', marginBottom: '10px',}}>
+          
+        </div>
+        
+        <div style={{ marginTop: '20px', marginBottom: '10px', marginRight: '20px'}}>
+        {active === 'Dashboard' &&  < Dashboard />}
+        {active === 'Lab Reports' &&  < LabRequests />}
+        {active === 'Security' &&  < AccountSettings name={''} email={''} phone={''} />}
+        {active === 'Notifications' &&  < PharmacyPage prescriptions={[]} />}
+        </div>
+          
+       
+    
+      </Grid.Col>
+    
+    </Grid>
+    
   );
 }
+

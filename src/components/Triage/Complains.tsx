@@ -10,13 +10,14 @@ import {
     ActionIcon,
     rem
   } from '@mantine/core';
-  import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
+  import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram, IconCheck } from '@tabler/icons';
  import { updateComplains } from '@/app/features/complains';
 import { useSelector,useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '@/app/store';
 import { useState } from 'react';
-import { BioData } from '@/app/features/triageSlice';
+import { BioData, getUsers } from '@/app/features/triageSlice';
 import { Notes } from './note';
+import { notifications } from '@mantine/notifications';
  
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -122,13 +123,34 @@ const useStyles = createStyles((theme) => ({
             />
   
             <Group position="right" mt="md">
-              {loading === 'idle' ?  <Button   onClick={(event) => {event.preventDefault(); dispatch(updateComplains(
+              {loading === 'idle' ?  <Button   onClick={(event) => {event.preventDefault(); 
+              notifications.show({
+                id: 'load-data',
+                loading: true,
+                title: 'Loading your data',
+                message: 'Data will be loaded in 3 seconds, you cannot close this yet',
+                autoClose: false,
+                withCloseButton: false,
+              });
+              dispatch(updateComplains(
                 {by:name,
                 hospital:hospital,
                 uid:user.bio.id,
                 complain:value,
                 timestamp:`${Date.now()}`
             }))
+            setTimeout(() => {
+              notifications.update({
+                id: 'load-data',
+                color: 'teal',
+                title: 'Data was loaded',
+                message: 'Notification will close in 2 seconds, you can close this notification now',
+                icon: <IconCheck size="1rem" />,
+                autoClose: 2000,
+              });
+              
+            }, 3000);
+            dispatch(getUsers(user.bio.id))
             }} className={classes.control}>Save complain</Button> : <Button disabled >save</Button>}
               
             </Group>

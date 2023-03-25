@@ -71,3 +71,8 @@ src/components/Admin/._Medicine.tsx
 src/components/Admin/._receive.tsx
 src/components/Admin/._AddOrder.tsx
 src/components/Admin/._addMedicine.tsx
+src/pages/hospital/lab/._index.tsx
+src/components/Lab/._labreport.tsx
+src/components/._Lab
+src/components/Lab/._Dashboard.tsx
+**/._*
