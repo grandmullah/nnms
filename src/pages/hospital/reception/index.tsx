@@ -146,7 +146,7 @@ export default function NavbarSimpleColored() {
             </a>
 
             <a href="#" className={classes.link} onClick={(event) => {signOut(auth).then(() => {
-                router.push('/hospital/')
+                router.push('/')
               }).catch((error) => {
                 // An error happened.
               });}}>

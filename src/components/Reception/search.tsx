@@ -321,15 +321,24 @@ const SearchPage = () => {
       }, delay);
     };
   };
+
   const handleQueryChange = debounce( async (value) => {
   console.log("User is still typing. Query:", value);
-  const q = query(collection(db, "patients"), where("id", "==", value));
+  if (value.length >=8) {
+    const q = query(collection(db, "patients"), where("id", "==", value));
 
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, " => ", doc.data());
-  });
+    const querySnapshot = await getDocs(q);
+    console.log(querySnapshot.size)
+    if(querySnapshot.size >0) {
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+        return 
+      });
+    }
+    
+  }
+ 
     
   }, 500);
 
