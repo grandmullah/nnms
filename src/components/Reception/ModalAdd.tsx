@@ -16,9 +16,11 @@ import { IconCalendar, IconCheck, IconX } from '@tabler/icons';
 
 interface clProps{
   closing:(value:boolean) =>void
+  id:string
 }
 
-export function AddPatient() {
+export interface id1 {id:string}
+export function AddPatient({id}:id1) {
   const [opened, setOpened] = useState(false);
    
 
@@ -35,7 +37,7 @@ export function AddPatient() {
         size="70%"
       >
         {/* Modal content */}
-        <Demo  closing={closing} />
+        <Demo  closing={closing}   id={id} />
       </Modal>
 
       <Group position="center">
@@ -49,7 +51,7 @@ export function AddPatient() {
 
  
 
-function Demo({closing}:clProps) {
+function Demo({closing,id}:clProps) {
 
   const count = useSelector((state:RootState) =>state.Auth )
 
@@ -66,9 +68,9 @@ function Demo({closing}:clProps) {
       });
      
       console.log(count)
-     
+      const n = (Math.random() * 0xfffff * 1000000).toString(16)
       console.log(values)
-     await setDoc(doc(db, "patients", values.id), {...values, access:[count.hospital], registered:Date.now(),});
+     await setDoc(doc(db, "patients", n), {...values, access:[count.hospital], registered:Date.now(),});
      
       closing(false)
       notifications.update({
@@ -107,7 +109,7 @@ function Demo({closing}:clProps) {
   const form = useForm({
     initialValues: {
       email: '',
-      id:'',
+      id:id,
       firstName:'',
       secondName:'',
       surname:'',
@@ -160,6 +162,8 @@ function Demo({closing}:clProps) {
           withAsterisk
           label="Identifcation"
           placeholder="id/birth cert"
+          
+          disabled
           {...form.getInputProps('id')}
         />
         </Group>
@@ -339,7 +343,7 @@ function Demo({closing}:clProps) {
           {...form.getInputProps('termsOfService', { type: 'checkbox' })}
         /> */}
 
-        <Group position="right" mt="md">
+        <Group grow>
           <Button type="submit" >Submit</Button>
         </Group>
       </form>
