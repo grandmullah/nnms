@@ -278,37 +278,40 @@ import { AuthState } from '@/app/features/authSlice';
 // }
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Group, Space } from '@mantine/core';
+import { Group, Space, Button } from '@mantine/core';
+import { Notification } from '@mantine/core';
+import { IconCheck, IconX } from '@tabler/icons-react';
+import { notifications } from '@mantine/notifications';
+import {AddPatient } from './ModalAdd'
+// type Patient = {
+//   id: string;
+//   name: string;
+//   age: number;
+//   gender: 'male' | 'female' | 'other';
+//   // Add other patient details here
+// };
 
-type Patient = {
-  id: string;
-  name: string;
-  age: number;
-  gender: 'male' | 'female' | 'other';
-  // Add other patient details here
-};
-
-const patients: Patient[] = [
-  { id: '1', name: 'John Doe', age: 45, gender: 'male' },
-  { id: '2', name: 'Jane Smith', age: 32, gender: 'female' },
-  // Add more patients here
-];
+// const patients: Patient[] = [
+//   { id: '1', name: 'John Doe', age: 45, gender: 'male' },
+//   { id: '2', name: 'Jane Smith', age: 32, gender: 'female' },
+//   // Add more patients here
+// ];
 
 const SearchPage = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const patient = patients.find(
-      (patient) => patient.id === searchQuery || patient.name === searchQuery
-    );
-    if (patient) {
-      router.push(`/patients/${patient.id}`); // Redirect to patient details page
-    } else {
-      router.push('/patients/new'); // Redirect to add new patient page
-    }
-  };
+  const [isVisible, setIsVisible] = useState(false);
+  // const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const patient = patients.find(
+  //     (patient) => patient.id === searchQuery || patient.name === searchQuery
+  //   );
+  //   if (patient) {
+  //     router.push(`/patients/${patient.id}`); // Redirect to patient details page
+  //   } else {
+  //     router.push('/patients/new'); // Redirect to add new patient page
+  //   }
+  // };
   const debounce = <F extends (...args: any[]) => void>(
     fn: F,
     delay: number
@@ -324,17 +327,35 @@ const SearchPage = () => {
 
   const handleQueryChange = debounce( async (value) => {
   console.log("User is still typing. Query:", value);
-  if (value.length >=8) {
+  if (value.length >=6) {
+    console.log("User is still under8 ");
     const q = query(collection(db, "patients"), where("id", "==", value));
 
     const querySnapshot = await getDocs(q);
     console.log(querySnapshot.size)
     if(querySnapshot.size >0) {
+
+      notifications.show({
+        title: 'Data was loaded',
+        message: 'patient was found',
+        color: 'green',
+        autoClose: 5000,
+        icon: <IconCheck size="1rem" />,
+      })
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         console.log(doc.id, " => ", doc.data());
         return 
       });
+    }else{
+      notifications.show({
+        title: 'Data was  not loaded',
+        message: 'patient was not  found',
+        color:'red',
+        autoClose: 5000,
+        icon: <IconCheck size="1rem" />,
+      })
+      setIsVisible(true)
     }
     
   }
@@ -345,6 +366,7 @@ const SearchPage = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setSearchQuery(value);
+    setIsVisible(false)
     handleQueryChange(value);
   };
 
@@ -393,7 +415,10 @@ const SearchPage = () => {
         </Group>
         <Space h={'md'} />
         <Group grow >
-       
+        
+          
+          {isVisible ? <AddPatient id={searchQuery}/> : null}
+    
         </Group>
 
         
