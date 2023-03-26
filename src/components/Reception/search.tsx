@@ -344,8 +344,8 @@ const SearchPage = () => {
       })
       querySnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
-        console.log(doc.id, " => ", doc.data());
-        return 
+        console.log(doc.id, " => ", JSON.stringify(doc.data()).toString());
+        // return router.push(`/patients/${p.id}`); // Redirect to patient details page 
       });
     }else{
       notifications.show({
@@ -420,11 +420,6 @@ const SearchPage = () => {
           {isVisible ? <AddPatient id={searchQuery}/> : null}
     
         </Group>
-
-        
-      
-     
-
     </div>
     </div>
   );
